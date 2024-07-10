@@ -1,0 +1,19 @@
+# 应用服务器 WEB 访问端口
+server:
+  port: 11451
+
+# 指定 Mybatis 的 Mapper 文件
+mybatis:
+  mapper-locations: classpath:mappers/*xml
+# 指定 Mybatis 的实体类包
+  type-aliases-package: com.example.demo.mybatis.entity
+
+
+spring:
+  application:
+    name: SpringBoot-demo
+  profiles:
+    active: jdbc
+
+
+
