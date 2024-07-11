@@ -1,9 +1,6 @@
 package com.example.demo.Mapper;
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
 
 @Mapper
@@ -18,4 +15,7 @@ public interface UserMapper {
 
     @Insert("insert into user(userName, userPassword) values(#{userName}, #{userPassword})")
     public void addUser(@Param("userName") String userName, @Param("userPassword") String userPassword);
+
+    @Update("update goods set GoodsState='已下架' where GoodsID=#{GoodsID}")
+    public boolean DeleteGoods(@Param("GoodsID")int GoodsID);
 }
