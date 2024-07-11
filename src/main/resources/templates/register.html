@@ -117,7 +117,12 @@
                     }).then(function (dat) {
                         if (dat.data == '1') {
                             window.location.href = '/user/successRegister'
-                        } else {
+                        }
+                        else if(dat.data == '2')
+                        {
+                            alert("用户名重复")
+                        }
+                        else {
                             alert("注册失败")
                         }
 
