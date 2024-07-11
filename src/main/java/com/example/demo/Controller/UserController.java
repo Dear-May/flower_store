@@ -128,20 +128,4 @@ public class UserController {
         }
         return null;
     }
-    @ResponseBody
-    @RequestMapping(value = "/deleteGoods", method = RequestMethod.POST)
-    public String deleteGoods(@RequestBody int GoodsID) {
-//        System.out.println(userMapper.DeleteGoods(GoodsID));
-        if(userMapper.DeleteGoods(GoodsID))
-        {
-            return "1";//删除成功
-        }
-        else {
-            return "-1";//删除失败
-        }
-
-    }
-
-
-
 }
