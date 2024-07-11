@@ -18,4 +18,8 @@ public interface UserMapper {
 
     @Update("update goods set GoodsState='已下架' where GoodsID=#{GoodsID}")
     public boolean DeleteGoods(@Param("GoodsID")int GoodsID);
+
+    @Update("update goods set GoodsName=#{GoodsName} where GoodsID=#{GoodsID}")
+    public boolean UpdateGoodName(@Param("GoodsID")int GoodsID,@Param("GoodsName")String GoodsName);
 }
+
