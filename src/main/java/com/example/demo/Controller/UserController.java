@@ -54,6 +54,10 @@ public class UserController {
     public String selectUserName(@RequestBody UserEntity user) {
         String userName = user.getUserName();
         String userPassword = user.getUserPassword();
+        if(userName.isEmpty() || userPassword.isEmpty())
+        {
+            return "-1";
+        }
         System.out.println(userName + userPassword);
 
         String result = "-1";
