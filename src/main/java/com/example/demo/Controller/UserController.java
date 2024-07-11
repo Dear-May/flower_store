@@ -88,6 +88,11 @@ public class UserController {
     public String addUser(@RequestBody UserEntity user) {
         String userName = user.getUserName();
         String userPassword = user.getUserPassword();
+        String selectRes = userMapper.selectUserName(user.getUserName());
+        if(!selectRes.isEmpty())//说明数据库有重复的用户名了
+        {
+            return "2";
+        }
         System.out.println(userName + "***" + userPassword);
         String passwordMD5 = passwordMD5(userName, userPassword);
         userMapper.addUser(userName, passwordMD5);
