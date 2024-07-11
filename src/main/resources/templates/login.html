@@ -68,6 +68,8 @@
                         alert("用户不存在")
                     else if (dat.data == '1')
                         alert("登录失败，账号或密码错误")
+                    else if (dat.data == '-1')
+                        alert("输入不能为空")
                     else if (dat.data == '2')
                         //当前窗体跳转
                         window.location.href = '/user/successLogin'
