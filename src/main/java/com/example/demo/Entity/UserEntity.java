@@ -12,11 +12,21 @@ public class UserEntity {
         this.userName = userName;
     }
 
+
+
     public String getUserPassword() {
         return userPassword;
     }
 
     public void setUserPassword(String userPassword) {
         this.userPassword = userPassword;
+    }
+
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+                "userName='" + userName + '\'' +
+                ", userPassword='" + userPassword + '\'' +
+                '}';
     }
 }
