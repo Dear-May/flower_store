@@ -176,7 +176,7 @@ public class GoodsController {
             }
        }
        else {//说明要将这条记录的num+1
-           if(goodsMapper.CartGoodIncrement(GoodsID,userId))
+           if(goodsMapper.CartGoodIncrement(userId,GoodsID))
            {
                return "1";//添加成功
            }
