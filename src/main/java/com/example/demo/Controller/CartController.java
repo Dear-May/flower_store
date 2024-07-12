@@ -63,9 +63,6 @@ public class CartController {
             else {
                 return "-1";
             }
-
-
-
         }
         if(shoppingCartMapper.CartGoodDecrement(userId,GoodsID))
         {
@@ -75,4 +72,18 @@ public class CartController {
             return "-1";//减少失败
         }
     }
+
+    @ResponseBody
+    @RequestMapping(value = "/goodsRemove", method = RequestMethod.POST)//添加商品到购物车，如果购物车没有这条记录就insert 有这一条记录就将这条记录的number+1
+    public String goodsRemove(@RequestParam(value = "GoodsId", required = false) int GoodsID,@RequestParam(value = "userId", required = false) int userId) {
+        if(shoppingCartMapper.CartDelete(userId,GoodsID))
+            {
+                return "1";
+
+            }
+            else {
+                return "-1";
+            }
+        }
+
 }
