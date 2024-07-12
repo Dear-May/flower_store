@@ -28,7 +28,7 @@ public class GoodsController {
         System.out.println(GoodsID);
         model.addAttribute("GoodsId",GoodsID);
         return "GoodInfo";
-    }
+    }//返回GoodInfo页面 并传递一个当前商品的id，页面在加载的时候通过这个id到数据库搜索全部的商品信息
 
     @ResponseBody
     @RequestMapping(value = "/deleteGood", method = RequestMethod.POST)//下架商品
