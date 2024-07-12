@@ -43,6 +43,6 @@ public interface GoodsMapper {
     public boolean insertShopCart(@Param("GoodsID")int GoodsID,@Param("userId") int userId);//给购物车新建一条记录
 
     @Update("update shopping_cart set cart_goodnum=cart_goodnum +1 where user_id=#{userId} and cart_goodid=#{GoodsID}")
-    public boolean CartGoodIncrement(@Param("GoodsID")int GoodsID,@Param("userId") int userId);
+    public boolean CartGoodIncrement(@Param("userId") int userId,@Param("GoodsID")int GoodsID);
 
 }
