@@ -2,9 +2,9 @@
 spring:
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: ${DATASOURCE_URL:jdbc:mysql://yueyue0313.dynv6.net:3306/test_lesson?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true&allowMultiQueries=true&allowPublicKeyRetrieval=true}
-    username: ${DATASOURCE_USERNAME:test_lesson}
-    password: ${DATASOURCE_PWD:20766666}
+    url: ${DATASOURCE_URL:jdbc:mysql://10.1.4.143:20867/jgxy_demo01?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true&allowMultiQueries=true&allowPublicKeyRetrieval=true}
+    username: ${DATASOURCE_USERNAME:jgxy_test01}
+    password: ${DATASOURCE_PWD:Vpyldack.gk}
 
 mybatis:
   mapper-locations: classpath:mappers/*.xml
