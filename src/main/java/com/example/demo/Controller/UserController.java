@@ -88,15 +88,23 @@ public class UserController {
     public String addUser(@RequestBody UserEntity user) {
         String userName = user.getUserName();
         String userPassword = user.getUserPassword();
-        String selectRes = userMapper.selectUserName(user.getUserName());
-        if(!selectRes.isEmpty())//说明数据库有重复的用户名了
+        try
         {
-            return "2";
+            String selectRes = userMapper.selectUserName(user.getUserName());
+            System.out.println(selectRes);
+            if(selectRes!=null)//说明数据库有重复的用户名了
+            {
+                return "2";
+            }
+            System.out.println(userName + "***" + userPassword);
+            String passwordMD5 = passwordMD5(userName, userPassword);
+            userMapper.addUser(userName, passwordMD5);
+            return "1";
+        }catch (Exception e)
+        {
+            return "-1";
         }
-        System.out.println(userName + "***" + userPassword);
-        String passwordMD5 = passwordMD5(userName, userPassword);
-        userMapper.addUser(userName, passwordMD5);
-        return "1";
+
     }
 
     public String passwordMD5(String userName, String userPassword) {
