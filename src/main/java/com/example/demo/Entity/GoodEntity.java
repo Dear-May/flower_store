@@ -1,5 +1,7 @@
 package com.example.demo.Entity;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class GoodEntity {
     private int id;
     private String goods_name;
@@ -7,17 +9,9 @@ public class GoodEntity {
     private String good_price;
     private String goods_category;
     private String goods_state;
-    private String goods_imgurl;
+    private MultipartFile goods_imgFile;
 
-    public GoodEntity(int id, String goods_name, String goods_describe, String good_price, String goods_category, String goods_state, String goods_imgurl) {
-        this.id = id;
-        this.goods_name = goods_name;
-        this.goods_describe = goods_describe;
-        this.good_price = good_price;
-        this.goods_category = goods_category;
-        this.goods_state = goods_state;
-        this.goods_imgurl = goods_imgurl;
-    }
+
 
     public int getId() {
         return id;
@@ -67,11 +61,24 @@ public class GoodEntity {
         this.goods_state = goods_state;
     }
 
-    public String getGoods_imgurl() {
-        return goods_imgurl;
+    public MultipartFile getGoods_imgFile() {
+        return goods_imgFile;
     }
 
-    public void setGoods_imgurl(String goods_imgurl) {
-        this.goods_imgurl = goods_imgurl;
+    public void setGoods_imgFile(MultipartFile goods_imgFile) {
+        this.goods_imgFile = goods_imgFile;
+    }
+
+    @Override
+    public String toString() {
+        return "GoodEntity{" +
+                "id=" + id +
+                ", goods_name='" + goods_name + '\'' +
+                ", goods_describe='" + goods_describe + '\'' +
+                ", good_price='" + good_price + '\'' +
+                ", goods_category='" + goods_category + '\'' +
+                ", goods_state='" + goods_state + '\'' +
+                ", goods_imgFile=" + goods_imgFile +
+                '}';
     }
 }
