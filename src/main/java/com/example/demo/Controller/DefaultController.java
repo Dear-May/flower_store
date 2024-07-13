@@ -3,8 +3,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 @Controller
 public class DefaultController {
-    @RequestMapping("/")
+    @RequestMapping({"/", "/index"})
     public String login() {
-        return "/login";
+        return "/index";
     }
+
 }

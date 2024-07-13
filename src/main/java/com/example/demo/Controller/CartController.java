@@ -17,14 +17,14 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/Cart")
+@RequestMapping("/cart")
 public class CartController {
     @Autowired
     ShoppingCartMapper shoppingCartMapper;
 
 
     @ResponseBody
-    @RequestMapping(value = "/getCartgood", method = RequestMethod.GET)//获取当前购物车所有商品
+    @RequestMapping(value = "/getcartgood", method = RequestMethod.GET)//获取当前购物车所有商品
     public Map<GoodEntityGet,Integer> getCartgood( @RequestParam(value = "userId", required = false) int userId) {
         Map<GoodEntityGet,Integer> map =new HashMap<>();
         List<GoodEntityGet> list=shoppingCartMapper.findPersonalGoodInCart(userId);

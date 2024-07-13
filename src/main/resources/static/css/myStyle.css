@@ -1,0 +1,77 @@
+  .navbar-brand {
+            font-family: 'Lobster', cursive;
+            font-size: 2em;
+            color: white;
+            margin-right: 30px;
+        }
+        .navbar-nav .nav-link {
+            color: white;
+            padding: 10px 15px;
+            position: relative;
+        }
+        .navbar-nav .nav-link.active {
+            color: white;
+        }
+        .navbar-nav .nav-link.active::after {
+            content: '\1F33A'; /* 插入图标，这里使用 Unicode 的花朵图标 🌺 */
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.5em;
+            color: white;
+        }
+        .navbar-nav .nav-link:hover {
+            background-color: #0056b3; /* 悬停时的背景颜色 */
+            color: white;
+        }
+        .input-group {
+            max-width: 300px;
+        }
+        .input-group .form-control {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        .input-group .btn {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+        .navbar-icons .nav-item {
+            margin-left: 15px;
+        }
+        .navbar-icons .nav-link {
+            display: flex;
+            align-items: center;
+        }
+
+		.navbar .contact-info {
+			color: white;
+		}
+
+		.carousel-inner img {
+			max-height: 420px;
+		}
+
+		.footer {
+			padding: 20px 0;
+			background-color: #f8f9fa;
+			border-top: 1px solid #e7e7e7;
+		}
+
+		.footer-links a {
+			margin-right: 10px;
+			color: #000;
+			text-decoration: none;
+		}
+
+		.footer-links a:hover {
+			text-decoration: underline;
+		}
+
+		.footer-info,
+		.footer-qrcode,
+		.footer-contact {
+			margin-top: 10px;
+		}

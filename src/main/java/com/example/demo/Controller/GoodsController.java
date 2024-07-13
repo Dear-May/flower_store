@@ -12,22 +12,22 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/Goods")
+@RequestMapping("/goods")
 public class GoodsController {
     @Autowired
     GoodsMapper goodsMapper;
 
-    @RequestMapping("/Goodslist")
-    public String Goodslist() {
-        return "Goodslist";
+    @RequestMapping("/goodslist")
+    public String goodsList() {
+        return "shop";
     }//返回GoodsList页面，然后在GoodList页面启动时，到getGoods控制器查询数据，并将数据返回
 
 
-    @RequestMapping("/GoodInfo")
+    @RequestMapping("/goodinfo")
     public String GoodInfo(@RequestParam(value = "GoodsId", required = false) int GoodsID, Model model) {
         System.out.println(GoodsID);
         model.addAttribute("GoodsId",GoodsID);
-        return "GoodInfo";
+        return "good";
     }//返回GoodInfo页面 并传递一个当前商品的id，页面在加载的时候通过这个id到数据库搜索全部的商品信息
 
     @ResponseBody

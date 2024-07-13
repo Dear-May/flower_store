@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>全部商品</title>
+    <link rel="stylesheet" th:href="@{/node_modules/bootstrap/dist/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/bootstrap-icons-1.7/bootstrap-icons.css}">
+    <link rel="stylesheet" th:href="@{/css/myStyle.css}">
+    <script type="text/javascript" th:src="@{/node_modules/bootstrap/dist/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jquery-3.4.1.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/vue.js}"></script>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .breadcrumb-item+.breadcrumb-item::before {
+            content: ">";
+        }
+
+        .card {
+            margin-bottom: 30px;
+        }
+
+        .card img {
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .filter-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .filter-bar select,
+        .filter-bar button {
+            margin-right: 10px;
+        }
+
+        .view-switcher button {
+            margin-left: 5px;
+        }
+
+        .list-view .card-horizontal {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .list-view .card-horizontal img {
+            width: 200px;
+            height: auto;
+        }
+
+        .list-view .card-horizontal .card-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .list-view .card-horizontal .btn {
+            width: 100px;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="bg-primary">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg navbar-light">
+                <a class="navbar-brand" href="#">花韵坊</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link  fs-5" href="index.html">首页</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active fs-5" href="shop.html">全部商品</a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- 搜索框 -->
+                <form class="d-flex mx-3">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="输入花品名称或关键字" aria-label="搜索"
+                            aria-describedby="basic-addon2">
+                        <button class="btn btn-dark" type="button" id="basic-addon2"><i class="bi bi-search"></i>
+                            搜索</button>
+                    </div>
+                </form>
+                <div class="navbar-icons d-flex align-items-center">
+                    <div class="nav-item">
+                        <a class="nav-link text-white" href="login.html">
+                            <i class="bi bi-person-circle mx-2"></i>请登录
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a class="nav-link text-white position-relative" href="cart.html">
+                            <i class="bi bi-cart4 mx-2"></i>购物车
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <div class="container mt-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">首页</a></li>
+                <li class="breadcrumb-item active" aria-current="page">商城</li>
+            </ol>
+        </nav>
+        <h1 class="mb-4">全部商品</h1>
+        <div class="filter-bar">
+            <div>
+                <select class="form-select" aria-label="Sort by popularity">
+                    <option selected>排序</option>
+                    <option value="1">Price: Low to High</option>
+                    <option value="2">Price: High to Low</option>
+                </select>
+            </div>
+            <div class="d-flex align-items-center">
+                <select class="form-select" aria-label="Categories">
+                    <option selected>分类</option>
+                    <option value="1">Sneakers</option>
+                    <option value="2">Boots</option>
+                    <option value="3">Sandals</option>
+                </select>
+                <select class="form-select" aria-label="Color">
+                    <option selected>颜色</option>
+                    <option value="1">Black</option>
+                    <option value="2">White</option>
+                    <option value="3">Red</option>
+                </select>
+                <select class="form-select" aria-label="Price">
+                    <option selected>价格</option>
+                    <option value="1">$0 - $50</option>
+                    <option value="2">$50 - $100</option>
+                    <option value="3">$100 - $200</option>
+                </select>
+                <div class="view-switcher d-flex align-items-center">
+                    <button class="btn btn-outline-secondary" id="gridViewBtn"><i
+                            class="bi bi-grid-3x3-gap-fill"></i></button>
+                    <button class="btn btn-outline-secondary" id="listViewBtn"><i class="bi bi-list"></i></button>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="productContainer">
+            <!-- 商品卡片开始 -->
+            <div class="col-md-3 product-item">
+                <div class="card">
+                    <img th:src="@{/imgs/item-1.jpg}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <a href="good.html"><h5 class="card-title mt-2">用心爱你</h5></a>
+                        <p class="card-text">与您相守，直到天荒地老；99枝：33枝粉玫瑰 + 66枝卡罗拉红玫瑰</p>
+                        <p class="card-text">¥659</p>
+                        <a href="#" class="btn btn-primary">加入购物车</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 product-item">
+                <div class="card">
+                    <img th:src="@{/imgs/item-2.jpg}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title mt-2">Armor Okwahn II</h5>
+                        <p class="card-text">与您相守，直到天荒地老；99枝：33枝粉玫瑰 + 66枝卡罗拉红玫瑰</p>
+                        <p class="card-text">¥90.00</p>
+                        <a href="#" class="btn btn-primary">加入购物车</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 product-item">
+                <div class="card">
+                    <img th:src="@{imgs/item-3.jpg}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title mt-2">Armor Air Wildwood ACG</h5>
+                        <p class="card-text">与您相守，直到天荒地老；99枝：33枝粉玫瑰 + 66枝卡罗拉红玫瑰</p>
+                        <p class="card-text">¥75.00</p>
+                        <a href="#" class="btn btn-primary">加入购物车</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 product-item">
+                <div class="card">
+                    <img th:src="@{imgs/item-4.jpg}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title mt-2">Armor ACG React Terra</h5>
+                        <p class="card-text">与您相守，直到天荒地老；99枝：33枝粉玫瑰 + 66枝卡罗拉红玫瑰</p>
+                        <p class="card-text">¥110.00</p>
+                        <a href="#" class="btn btn-primary">加入购物车</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 product-item">
+                <div class="card">
+                    <img th:src="@{/imgs/item-1.jpg}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title mt-2">用心爱你</h5>
+                        <p class="card-text">与您相守，直到天荒地老；99枝：33枝粉玫瑰 + 66枝卡罗拉红玫瑰</p>
+                        <p class="card-text">¥659</p>
+                        <a href="#" class="btn btn-primary">加入购物车</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 product-item">
+                <div class="card">
+                    <img th:src="@{/imgs/item-2.jpg}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title mt-2">Armor Okwahn II</h5>
+                        <p class="card-text">与您相守，直到天荒地老；99枝：33枝粉玫瑰 + 66枝卡罗拉红玫瑰</p>
+                        <p class="card-text">¥90.00</p>
+                        <a href="#" class="btn btn-primary">加入购物车</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 product-item">
+                <div class="card">
+                    <img th:src="@{/imgs/item-3.jpg}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title mt-2">Armor Air Wildwood ACG</h5>
+                        <p class="card-text">与您相守，直到天荒地老；99枝：33枝粉玫瑰 + 66枝卡罗拉红玫瑰</p>
+                        <p class="card-text">¥75.00</p>
+                        <a href="#" class="btn btn-primary">加入购物车</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 product-item">
+                <div class="card">
+                    <img th:src="@{/imgs/item-4.jpg}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title mt-2">Armor ACG React Terra</h5>
+                        <p class="card-text">与您相守，直到天荒地老；99枝：33枝粉玫瑰 + 66枝卡罗拉红玫瑰</p>
+                        <p class="card-text">¥110.00</p>
+                        <a href="#" class="btn btn-primary">加入购物车</a>
+                    </div>
+                </div>
+            </div>
+            <!-- 继续添加更多商品卡片 -->
+            <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+            </nav>
+        </div>
+    </div>
+    <footer class="footer mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 footer-links">
+                    <a href="#">关于我们</a>
+                    <a href="#">联系我们</a>
+                    <a href="#">花语大全</a>
+                    <a href="#">购物指南</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+        document.getElementById('gridViewBtn').addEventListener('click', function () {
+            const productContainer = document.getElementById('productContainer');
+            productContainer.classList.remove('list-view');
+            productContainer.classList.add('row');
+            const items = productContainer.getElementsByClassName('product-item');
+            for (let item of items) {
+                item.classList.add('col-md-3');
+                item.classList.remove('col-md-12');
+                const card = item.querySelector('.card');
+                card.classList.remove('card-horizontal');
+                const detail = card.querySelector('.card-detail');
+                if (detail) {
+                    detail.remove();
+                }
+                const button = card.querySelector('.btn');
+                button.classList.remove('btn-sm');
+            }
+        });
+
+        document.getElementById('listViewBtn').addEventListener('click', function () {
+            const productContainer = document.getElementById('productContainer');
+            productContainer.classList.remove('row');
+            productContainer.classList.add('list-view');
+            const items = productContainer.getElementsByClassName('product-item');
+            for (let item of items) {
+                item.classList.remove('col-md-3');
+                item.classList.add('col-md-12');
+                const card = item.querySelector('.card');
+                card.classList.add('card-horizontal');
+                const detail = document.createElement('p');
+                detail.classList.add('card-detail');
+                card.querySelector('.card-body').appendChild(detail);
+                const button = card.querySelector('.btn');
+                button.classList.add('btn-sm');
+            }
+        });
+    </script>
+</body>
+</html>
