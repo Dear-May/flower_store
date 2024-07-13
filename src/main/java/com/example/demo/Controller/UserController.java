@@ -28,12 +28,12 @@ public class UserController {
 
     @RequestMapping("/successLogin")
     public String successLogin() {
-        return "successLogin";
+        return "index";
     }
 
     @RequestMapping("/successRegister")
     public String successRegister() {
-        return "successRegister";
+        return "index";
     }
 
     @ResponseBody
