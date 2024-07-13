@@ -5,7 +5,10 @@ import org.springframework.web.bind.annotation.*;
 public class DefaultController {
     @RequestMapping({"/", "/index"})
     public String login() {
-        return "/index";
+       return "/index";
     }
-
+    @RequestMapping({"/carttest"})
+    public String toCart(){
+        return "/carts";
+    }
 }

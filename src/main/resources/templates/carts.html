@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>购物车</title>
+    <link rel="stylesheet" th:href="@{node_modules/bootstrap/dist/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{bootstrap-icons-1.7/bootstrap-icons.css}">
+    <link rel="stylesheet" th:href="@{css/myStyle.css}">
+    <link rel="stylesheet" th:href="@{css/carts.css}">
+    <script type="text/javascript" th:src="@{node_modules/bootstrap/dist/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{js/jquery-3.4.1.min.js}"></script>
+    <script type="text/javascript" th:src="@{js/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{js/vue.js}"></script>
+</head>
+
+<body>
+    <header class="bg-primary">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg navbar-light">
+                <a class="navbar-brand" href="/index">花韵坊</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link fs-5" href="/index">首页</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link fs-5" href="shop.html">全部商品</a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- 搜索框 -->
+                <form class="d-flex mx-3">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="输入花品名称或关键字" aria-label="搜索"
+                            aria-describedby="basic-addon2">
+                        <button class="btn btn-dark" type="button" id="basic-addon2"><i class="bi bi-search"></i>
+                            搜索</button>
+                    </div>
+                </form>
+                <div class="navbar-icons d-flex align-items-center">
+                    <div class="nav-item">
+                        <a class="nav-link text-white" href="/user/login">
+                            <i class="bi bi-person-circle mx-2"></i>请登录
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a class="nav-link text-white position-relative" href="#">
+                            <i class="bi bi-cart4 mx-2"></i>购物车
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <div class="container mt-3" id="app">
+        <h2>购物车 (全部 {{ cart.length }} 件)</h2>
+        <div class="table-container">
+            <table id="car" class="table table-striped rounded">
+                <thead>
+                    <tr>
+                        <th class="check me-2">
+                            <label class="custom-checkbox">
+                                <input type="checkbox" v-model="allSelected" @change="selectAll">
+                                <span class="checkmark"></span>
+                            </label>
+                            全选
+                        </th>
+                        <th>商品图片</th>
+                        <th>商品名称</th>
+                        <th>单价</th>
+                        <th>数量</th>
+                        <th>小计</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(item, index) in cart" :key="index">
+                        <td>
+                            <label class="custom-checkbox">
+                                <input type="checkbox" v-model="item.selected">
+                                <span class="checkmark"></span>
+                            </label>
+                        </td>
+                        <td>
+                            <img :src="item.imgUrl" width="80" height="80" alt="商品图片">
+                        </td>
+                        <td>
+                            <span>{{ item.proName }}</span>
+                        </td>
+                        <td>
+                            <span>{{ item.proPrice }}元</span>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-secondary"
+                                @click="updateQuantity(item, -1)">-</button>
+                            <span class="mx-2">{{ item.quantity }}</span>
+                            <button class="btn btn-sm btn-outline-secondary" @click="updateQuantity(item, 1)">+</button>
+                        </td>
+                        <td>
+                            <span>{{ item.proPrice * item.quantity }}元</span>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-danger" @click="removeItem(index)">×</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="sum_area" class="d-flex justify-content-between align-items-center mt-4">
+            <div id="pay" class="btn btn-primary" @click="openModal">去结算</div>
+            <div id="pay_amout">合计：<span id="price_num">{{ totalAmount }}</span>元</div>
+        </div>
+        <!-- 模态框 -->
+        <div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="checkoutModalLabel">结算信息</h5>
+                        <button type="button" class="btn-close" @click="closeModal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>勾选的商品：</p>
+                        <ul id="selected-items">
+                            <li v-for="item in selectedItems" :key="item.proName">{{ item.proName }} x {{ item.quantity
+                                }} -
+                                {{ item.proPrice * item.quantity }}元</li>
+                        </ul>
+                        <p>合计：<span id="modal-total-price">{{ totalAmount }}</span>元</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="go-to-pay">去支付</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="footer mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 footer-links">
+                    <a href="#">关于我们</a>
+                    <a href="#">联系我们</a>
+                    <a href="#">花语大全</a>
+                    <a href="#">购物指南</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+        new Vue({
+                el: '#app',
+                data: {
+                    cart: [
+                        { imgUrl: "item-1.jpg", proName: "小米手环4 NFC版", proPrice: 229, quantity: 1, selected: false },
+                        { imgUrl: "img/03-car-02.png", proName: "Redmi AirDots真无线蓝牙耳机", proPrice: 99.9, quantity: 1, selected: false },
+                        { imgUrl: "img/03-car-03.png", proName: "米家蓝牙温湿度计", proPrice: 65, quantity: 1, selected: false }
+                    ],
+                    allSelected: false,
+                    modal: null
+                },
+                computed: {
+                    totalAmount() {
+                        return this.cart.reduce((sum, item) => {
+                            return sum + (item.selected ? item.proPrice * item.quantity : 0);
+                        }, 0);
+                    },
+                    selectedItems() {
+                        return this.cart.filter(item => item.selected);
+                    }
+                },
+                methods: {
+                    selectAll() {
+                        this.cart.forEach(item => {
+                            item.selected = this.allSelected;
+                        });
+                    },
+                    updateQuantity(item, amount) {
+                        if (item.quantity + amount > 0) {
+                            item.quantity += amount;
+                        }
+                    },
+                    removeItem(index) {
+                        this.cart.splice(index, 1);
+                    },
+                    openModal() {
+                        this.modal = new bootstrap.Modal(document.getElementById('checkoutModal'));
+                        this.modal.show();
+                    },
+                    closeModal() {
+                        if (this.modal) {
+                            this.modal.hide();
+                        }
+                    }
+                }
+            });
+    </script>
+
+</body>
+
+</html>

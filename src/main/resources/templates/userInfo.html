@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人中心</title>
+    <link rel="stylesheet" th:href="@{node_modules/bootstrap/dist/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{bootstrap-icons-1.7/bootstrap-icons.css}">
+    <link rel="stylesheet" th:href="@{css/myStyle.css}">
+    <link rel="stylesheet" th:href="@{css/carts.css}">
+    <script type="text/javascript" th:src="@{node_modules/bootstrap/dist/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{js/jquery-3.4.1.min.js}"></script>
+    <script type="text/javascript" th:src="@{js/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{js/vue.js}"></script>
+</head>
+
+<body>
+    <header class="bg-primary">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg navbar-light">
+                <a class="navbar-brand" href="/index">花韵坊</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link fs-5" href="/index">首页</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link fs-5" href="/goods/goodslist">全部商品</a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- 搜索框 -->
+                <form class="d-flex mx-3">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="输入花品名称或关键字" aria-label="搜索"
+                            aria-describedby="basic-addon2">
+                        <button class="btn btn-dark" type="button" id="basic-addon2"><i class="bi bi-search"></i>
+                            搜索</button>
+                    </div>
+                </form>
+                <div class="navbar-icons d-flex align-items-center">
+                    <div class="nav-item">
+                        <a class="nav-link text-white" href="/user/login">
+                            <i class="bi bi-person-circle mx-2"></i>请登录
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a class="nav-link text-white position-relative" href="/carttest">
+                            <i class="bi bi-cart4 mx-2"></i>购物车
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <div id="app">
+        <div class="container">
+            <!-- Header -->
+            <div class="d-flex justify-content-between align-items-center py-3">
+                <h1>个人中心</h1>
+                <button class="btn btn-primary" @click="showModal = true">信息修改</button>
+            </div>  
+            <!-- Profile Section -->
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-2">
+                            <div class="profile-avatar">
+                                <img th:src="@{/imgs/icon/icon1.jpg}" alt="Avatar" class="rounded-circle img-fluid">
+                            </div>
+                        </div>
+                        <div class="col-md-10">
+                            <h2>用户名:{{ profile.name }}</h2>
+                            <p>ID: {{ profile.id }} <button class="btn btn-link btn-sm">复制</button></p>
+                            <p>电话:{{ profile.phone }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Section -->
+            <div class="card">
+                <div class="card-header">
+                    我的订单
+                </div>
+                <div class="card-body">
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item" @click="currentTab = 'allOrders'">
+                            <a :class="{'nav-link': true, active: currentTab === 'allOrders'}" href="#">全部订单</a>
+                        </li>
+                        <li class="nav-item" @click="currentTab = 'pendingPayment'">
+                            <a :class="{'nav-link': true, active: currentTab === 'pendingPayment'}" href="#">待付款</a>
+                        </li>
+                        <li class="nav-item" @click="currentTab = 'pendingShipment'">
+                            <a :class="{'nav-link': true, active: currentTab === 'pendingShipment'}" href="#">未发货</a>
+                        </li>
+                        <li class="nav-item" @click="currentTab = 'pendingReceipt'">
+                            <a :class="{'nav-link': true, active: currentTab === 'pendingReceipt'}" href="#">待收货</a>
+                        </li>
+                    </ul>
+                    <div class="mt-3">
+                        <div v-if="currentTab === 'allOrders'" v-for="order in orders.allOrders" :key="order.id"
+                            class="order-list border-bottom pb-2 mb-2">
+                            <p>订单: {{ order.id }} <span :class="order.statusClass">{{ order.status }}</span></p>
+                            <p>下单时间: {{ order.orderTime }}</p>
+                            <a href="#" class="btn btn-link">查看订单详情</a>
+                        </div>
+                        <div v-if="currentTab === 'pendingPayment'" v-for="order in filteredOrders('待付款')"
+                            :key="order.id" class="order-list border-bottom pb-2 mb-2">
+                            <p>订单: {{ order.id }} <span :class="order.statusClass">{{ order.status }}</span></p>
+                            <p>下单时间: {{ order.orderTime }}</p>
+                            <a href="#" class="btn btn-link">查看订单详情</a>
+                        </div>
+                        <div v-if="currentTab === 'pendingShipment'" v-for="order in filteredOrders('未发货')"
+                            :key="order.id" class="order-list border-bottom pb-2 mb-2">
+                            <p>订单: {{ order.id }} <span :class="order.statusClass">{{ order.status }}</span></p>
+                            <p>下单时间: {{ order.orderTime }}</p>
+                            <a href="#" class="btn btn-link">查看订单详情</a>
+                        </div>
+                        <div v-if="currentTab === 'pendingReceipt'" v-for="order in filteredOrders('待收货')"
+                            :key="order.id" class="order-list border-bottom pb-2 mb-2">
+                            <p>订单: {{ order.id }} <span :class="order.statusClass">{{ order.status }}</span></p>
+                            <p>下单时间: {{ order.orderTime }}</p>
+                            <a href="#" class="btn btn-link">查看订单详情</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" tabindex="-1" role="dialog" :class="{show: showModal}" style="display: block;"
+            v-if="showModal">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">信息修改</h5>
+                        <button type="button" class="btn-close" @click="showModal = false" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item" @click="modalTab = 'changePassword'">
+                                <a :class="{'nav-link': true, active: modalTab === 'changePassword'}" href="#">密码修改</a>
+                            </li>
+                            <li class="nav-item" @click="modalTab = 'addressManagement'">
+                                <a :class="{'nav-link': true, active: modalTab === 'addressManagement'}"
+                                    href="#">地址管理</a>
+                            </li>
+                        </ul>
+                        <div class="mt-3">
+                            <div v-if="modalTab === 'changePassword'">
+                                <form class="form-inline">
+                                    <div class="form-group">
+                                        <label for="currentPassword">当前密码</label>
+                                        <input type="password" class="form-control" id="currentPassword"
+                                            placeholder="输入当前密码">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="newPassword">新密码</label>
+                                        <input type="password" class="form-control" id="newPassword"
+                                            placeholder="输入新密码">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="confirmPassword">确认新密码</label>
+                                        <input type="password" class="form-control" id="confirmPassword"
+                                            placeholder="确认新密码">
+                                    </div>
+                                    <button type="submit" class="btn btn-outline-primary mt-4">保存</button>
+                                </form>
+                            </div>
+                            <div v-if="modalTab === 'addressManagement'">
+                                <p>地址管理功能尚未实现。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+        </div>
+        <div class="modal-backdrop fade show" v-if="showModal"></div>
+    </div>
+    </div>
+
+    <footer class="footer mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 footer-links">
+                    <a href="#">关于我们</a>
+                    <a href="#">联系我们</a>
+                    <a href="#">花语大全</a>
+                    <a href="#">购物指南</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                showModal: false,
+                modalTab: 'changePassword',
+                currentTab: 'allOrders',
+                profile: {
+                    avatar: 'https://via.placeholder.com/100', // 替换为实际的头像图片路径
+                    name: 'xxx',
+                    id: '209901071128',
+                    phone: '136****5678'
+                },
+                orders: {
+                    allOrders: [
+                        {
+                            id: '209907091214560078',
+                            status: '花店已接单',
+                            statusClass: 'text-success',
+                            orderTime: '2099-02-23 10:53:57'
+                        },
+                        {
+                            id: '209906191214560092',
+                            status: '配送中',
+                            statusClass: 'text-primary',
+                            orderTime: '2099-02-23 10:53:57'
+                        },
+                        {
+                            id: '209905081214560045',
+                            status: '待付款',
+                            statusClass: 'text-warning',
+                            orderTime: '2099-02-23 10:53:57'
+                        },
+                        {
+                            id: '209904071214560012',
+                            status: '未发货',
+                            statusClass: 'text-danger',
+                            orderTime: '2099-02-23 10:53:57'
+                        }
+                    ]
+                }
+            },
+            methods: {
+                filteredOrders(status) {
+                    return this.orders.allOrders.filter(order => order.status === status);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
