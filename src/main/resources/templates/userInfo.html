@@ -79,7 +79,7 @@
                         </div>
                         <div class="col-md-10">
                             <h2>用户名:{{ profile.name }}</h2>
-                            <p>ID: {{ profile.id }} <button class="btn btn-link btn-sm">复制</button></p>
+                            <p>ID: {{ profile.id }} <button class="btn btn-link btn-sm" @click="copyId">复制</button></p>
                             <p>电话:{{ profile.phone }}</p>
                         </div>
                     </div>
@@ -148,6 +148,9 @@
                             <li class="nav-item" @click="modalTab = 'changePassword'">
                                 <a :class="{'nav-link': true, active: modalTab === 'changePassword'}" href="#">密码修改</a>
                             </li>
+                            <li class="nav-item" @click="modalTab = 'changeAvater'">
+                                <a :class="{'nav-link': true, active: modalTab === 'addressManagement'}" href="#">修改头像</a>
+                            </li>
                             <li class="nav-item" @click="modalTab = 'addressManagement'">
                                 <a :class="{'nav-link': true, active: modalTab === 'addressManagement'}"
                                     href="#">地址管理</a>
@@ -174,6 +177,10 @@
                                     <button type="submit" class="btn btn-outline-primary mt-4">保存</button>
                                 </form>
                             </div>
+                            <div v-if="modalTab === 'changeAvatar'">
+                                <input type="file" @change="onFileChange">
+                                <button class="btn btn-primary" @click="uploadAvatar">上传头像</button>
+                            </div>
                             <div v-if="modalTab === 'addressManagement'">
                                 <p>地址管理功能尚未实现。</p>
                             </div>
@@ -199,28 +206,6 @@
         </div>
     </footer>
     </div>
-
-    <script>
-        new Vue({
-            el: '#app',
-            data: {
-                showModal: false,
-                modalTab: 'changePassword',
-                currentTab: 'allOrders',
-                profile: {
-                    avatar: 'https://yueyue0313.dynv6.net:8008/A001.png', // 替换为实际的头像图片路径
-                    name: 'xxx',
-                    id: '209901071128',
-                    phone: '136****5678'
-                },
-
-            methods: {
-                filteredOrders(status) {
-                    return this.orders.allOrders.filter(order => order.status === status);
-                }
-            }
-        });
-    </script>
     <script>
         new Vue({
             el: '#app',
@@ -266,10 +251,11 @@
                 if (username) {
                     axios.post('/user/showUserInfo', {
                         userName: username,
-                        headers: {'Content-Type': 'application/x-www-form-urlencoded'}   //跨域
+                        // headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                     })
                         .then(response => {
                             this.profile = response.data;
+                            console.log(response.data)
                         })
                         .catch(error => {
                             console.error('Error fetching user profile:', error);
@@ -285,7 +271,34 @@
                         .catch(err => {
                             console.error('无法复制ID:', err);
                         });
-                }
+                },
+                onFileChange(event) {
+                    this.selectedFile = event.target.files[0]; // 获取选中的文件
+                },
+                uploadAvatar() {
+                    if (this.selectedFile) {
+                        const formData = new FormData();
+                        formData.append('avatar', this.selectedFile);
+                        formData.append('username', localStorage.getItem('username')); // 假设需要发送用户名
+
+                        axios.post('/api/uploadAvatar', formData, {
+                            headers: {
+                                'Content-Type': 'multipart/form-data'
+                            }
+                        })
+                            .then(response => {
+                                alert('头像上传成功');
+                                // 更新头像URL
+                                this.profile.avatar = response.data.avatarUrl;
+                            })
+                            .catch(error => {
+                                console.error('Error uploading avatar:', error);
+                                alert('头像上传失败');
+                            });
+                    } else {
+                        alert('请选择一个文件');
+                    }
+                },
             }
         });
     </script>
