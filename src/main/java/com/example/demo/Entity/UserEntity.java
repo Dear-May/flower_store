@@ -14,6 +14,14 @@ public class UserEntity {
         this.userName = userName;
     }
 
+    public String getUserImage() {
+        return userImage;
+    }
+
+    public void setUserImage(String userImage) {
+        this.userImage = userImage;
+    }
+
     public String getUserPassword() {
         return userPassword;
     }

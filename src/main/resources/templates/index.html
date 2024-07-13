@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,55 +12,106 @@
 	<script type="text/javascript" th:src="@{/js/jquery-3.4.1.min.js}"></script>
 	<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
 	<script type="text/javascript" th:src="@{/js/vue.js}"></script>
+	<style>
+		.input-group .form-control {
+			border: none;
+			/* 移除所有边框 */
+			border-bottom: 1px solid white;
+			/* 添加底部白色线条 */
+			background: transparent;
+			/* 如果需要，可以设置背景为透明 */
+			color: white;
+		}
 
+		.input-group .form-control::placeholder {
+			color: white;
+			/* 设置placeholder文字颜色为白色 */
+			opacity: 1;
+			/* 确保placeholder文字不透明 */
+		}
+
+		.input-group .form-control:focus {
+			outline: none;
+			/* 移除聚焦时的轮廓 */
+			box-shadow: none;
+			/* 移除聚焦时的阴影 */
+			border-bottom-width: 2px;
+			/* 线条变粗 */
+			transition: width 0.5s ease;
+		}
+
+
+		.input-group .btn {
+			border: none;
+			/* 移除所有边框 */
+			background-color: transparent;
+
+		}
+
+		.input-group .btn:hover {
+			background-color: rgba(204, 201, 201, 0.29);
+		}
+	</style>
 </head>
 
 <body>
-	<header class="bg-primary">
-		<div class="container">
-			<nav class="navbar navbar-expand-lg navbar-light">
-				<a class="navbar-brand" href="/index">花韵坊</a>
-				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-					aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-					<span class="navbar-toggler-icon"></span>
-				</button>
-				<div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-					<ul class="navbar-nav">
-						<li class="nav-item">
-							<a class="nav-link active fs-5" href="/index">首页</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link fs-5" href="/goods/goodslist">全部商品</a>
-						</li>
-					</ul>
-				</div>
-				<!-- 搜索框 -->
-				<form class="d-flex mx-3">
-					<div class="input-group">
-						<input type="text" class="form-control" placeholder="输入花品名称或关键字" aria-label="搜索"
-							aria-describedby="basic-addon2">
-						<button class="btn btn-dark" type="button" id="basic-addon2"><i class="bi bi-search"></i>
-							搜索</button>
+	<header>
+		<div class="header-bg">
+
+			<div class="container">
+				<nav class="navbar navbar-expand-lg navbar-light">
+					<a class="navbar-brand" href="/index">花韵坊</a>
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+						aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+					<div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+						<ul class="navbar-nav">
+							<li class="nav-item">
+								<a class="nav-link active fs-5" href="/index">首页</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link fs-5" href="/goods/goodslist">全部商品</a>
+							</li>
+						</ul>
 					</div>
-				</form>
-				<div class="navbar-icons d-flex align-items-center">
-					<div class="nav-item d-inline-flex">
-						<i class="bi bi-person-circle text-white mx-3 "></i>
-						<a class="nav-link text-white" href="/user/login" id="userNav">
-							请登录
-						</a>
+					<!-- 搜索框 -->
+					<form class="d-flex mx-3">
+						<div class="input-group">
+							<input type="text" class="form-control" placeholder="输入搜索内容" aria-label="搜索"
+								aria-describedby="basic-addon2">
+							<button class="btn btn-dark" type="button" id="basic-addon2"><i
+									class="bi bi-search"></i></button>
+						</div>
+					</form>
+					<div class="navbar-icons d-flex align-items-center">
+						<div class="nav-item d-inline-flex">
+							<i class="bi bi-person-circle text-white mx-3 "></i>
+							<a class="nav-link text-white" href="/user/login" id="userNav">
+								登录
+							</a>
+						</div>
+						<div class="nav-item">
+							<a class="nav-link text-white position-relative" href="/carttest">
+								<i class="bi bi-cart4 mx-2"></i>购物车
+							</a>
+						</div>
 					</div>
-					<div class="nav-item">
-						<a class="nav-link text-white position-relative" href="/carttest">
-							<i class="bi bi-cart4 mx-2"></i>购物车
-						</a>
-					</div>
-				</div>
-			</nav>
+				</nav>
+			</div>
 		</div>
 	</header>
-	<!-- 轮播图 -->
+	<img th:src="@{/imgs/text.png}">
+
 	<div class="container mt-3">
+		<img th:src="@{/imgs/text.png}">
+		<div class="text">
+			<p>尝试在生活的地方放上一瓶鲜花</p>
+			<p>只想好好取悦自己，用鲜花点亮生活，治愈一切</p>
+			<p>订阅花韵坊，一月四次，一周一束</p>
+			<p>和每个平淡且重复的日子说ByeBye</p>
+		</div>
+		<!-- 轮播图 -->
 		<div id="carouselExampleIndicators" class="carousel slide">
 			<div class="carousel-indicators">
 				<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
@@ -94,6 +146,11 @@
 	</div>
 	<!-- 今日上新、热销推荐 -->
 	<div class="container mt-3">
+		<img th:src="@{/imgs/text3.png}">
+		<div class="text">
+			<p>花韵坊已与多位国际花艺大师达成合作</p>
+			<p>为你每周的花束中增添无穷艺术魅力，体验来自全球的鲜花美学冲击</p>
+		</div>
 		<div class="card text-center">
 			<div class="card-header">
 				<ul class="nav nav-tabs card-header-tabs" id="myTab" role="tablist">
@@ -150,7 +207,7 @@
 	<footer class="footer mt-5">
 		<div class="container">
 			<div class="row">
-				<div class="col-md-4 footer-links">
+				<div class="footer-links">
 					<a href="#">关于我们</a>
 					<a href="#">联系我们</a>
 					<a href="#">花语大全</a>
@@ -158,12 +215,16 @@
 				</div>
 			</div>
 		</div>
+		<br>
+		<!-- <p>©2013-2021 flowerplus.cn Inc. All Rights Reserved. 上海分尚网络科技有限公司</p>
+		<p>版权所有 沪ICP备13016979 沪公网安备 31011402005615号 | 食品经营许可证编号：JY13101050027966</p> -->
+
 	</footer>
 	<script>
 		function getCookie(name) {
 			const nameEQ = name + "=";
 			const ca = document.cookie.split(';');
-			for(let i = 0; i < ca.length; i++) {
+			for (let i = 0; i < ca.length; i++) {
 				let c = ca[i];
 				while (c.charAt(0) === ' ') c = c.substring(1, c.length);
 				if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);

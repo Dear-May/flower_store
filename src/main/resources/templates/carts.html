@@ -7,59 +7,103 @@
     <title>购物车</title>
     <link rel="stylesheet" th:href="@{/node_modules/bootstrap/dist/css/bootstrap.min.css}">
     <link rel="stylesheet" th:href="@{/bootstrap-icons-1.7/bootstrap-icons.css}">
-    <link rel="stylesheet" th:href="@{/css/myStyle.css}">
     <link rel="stylesheet" th:href="@{/css/carts.css}">
     <script type="text/javascript" th:src="@{/node_modules/bootstrap/dist/js/bootstrap.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/jquery-3.4.1.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/vue.js}"></script>
     <script type="text/javascript" th:src="@{/js/public.js}"></script>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            color: black;
+        }
 
+        .header-bg {
+            height: 240px;
+            background: url("/imgs/index-2.jpg")  center;
+        }
+
+        .navbar-brand {
+            color: #000000;
+            font-weight: bold;
+        }
+
+        .navbar-brand:hover {
+            color: black;
+        }
+
+        .navbar-nav .nav-link {
+            color: black;
+            margin-right: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .navbar-nav .nav-link.active {
+            color: black;
+        }
+
+        .navbar-nav .nav-link:hover::before {
+            background-color: rgb(0, 0, 0);
+            /* 线条的颜色 */
+        }
+
+        .input-group .form-control {
+            border-bottom: 1px solid rgb(69, 60, 60);
+            /* 添加底部白色线条 */
+            color: black;
+        }
+
+        .input-group .form-control::placeholder {
+            color: black;
+        }
+    </style>
 </head>
 
 <body>
-    <header class="bg-primary">
-        <div class="container">
-            <nav class="navbar navbar-expand-lg navbar-light">
-                <a class="navbar-brand" href="/index">花韵坊</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link fs-5" href="/index">首页</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link fs-5" href="shop.html">全部商品</a>
-                        </li>
-                    </ul>
-                </div>
-                <!-- 搜索框 -->
-                <form class="d-flex mx-3">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="输入花品名称或关键字" aria-label="搜索"
-                            aria-describedby="basic-addon2">
-                        <button class="btn btn-dark" type="button" id="basic-addon2"><i class="bi bi-search"></i>
-                            搜索</button>
+    <header>
+        <div class="header-bg">
+            <div class="container">
+                <nav class="navbar navbar-expand-lg navbar-light">
+                    <a class="navbar-brand" href="/index">花韵坊</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a class="nav-link fs-5" href="/index">首页</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link fs-5" href="shop.html">全部商品</a>
+                            </li>
+                        </ul>
                     </div>
-                </form>
-                <div class="navbar-icons d-flex align-items-center">
-                    <div class="nav-item">
-                        <a class="nav-link text-white" href="/user/login">
-                            <i class="bi bi-person-circle mx-2"></i>请登录
-                        </a>
+                    <!-- 搜索框 -->
+                    <form class="d-flex mx-3">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="输入搜索内容" aria-label="搜索"
+                                   aria-describedby="basic-addon2">
+                            <button class="btn btn-dark" type="button" id="basic-addon2"><i
+                                    class="bi bi-search"></i></button>
+                        </div>
+                    </form>
+                    <div class="navbar-icons d-flex align-items-center">
+                        <div class="nav-item d-inline-flex">
+                            <i class="bi bi-person-circle  mx-3 "></i>
+                            <a class="nav-link fw-bolder" href="/user/login" id="userNav">
+                                登录
+                            </a>
+                        </div>
+
                     </div>
-                    <div class="nav-item">
-                        <a class="nav-link text-white position-relative" href="#">
-                            <i class="bi bi-cart4 mx-2"></i>购物车
-                        </a>
-                    </div>
-                </div>
-            </nav>
+                </nav>
+            </div>
         </div>
     </header>
+    <img th:src="@{/imgs/text.png}">
     <div class="container mt-3" id="app">
         <h2>购物车 (全部 {{ cart.length }} 件)</h2>
         <div class="table-container">
@@ -115,7 +159,7 @@
             </table>
         </div>
         <div id="sum_area" class="d-flex justify-content-between align-items-center mt-4">
-            <div id="pay" class="btn btn-primary" @click="openModal">去结算</div>
+            <div id="pay" class="btn btn-outline-danger" @click="openModal">去结算</div>
             <div id="pay_amout">合计：<span id="price_num">{{ totalAmount }}</span>元</div>
         </div>
         <!-- 模态框 -->
@@ -146,7 +190,7 @@
     <footer class="footer mt-5">
         <div class="container">
             <div class="row">
-                <div class="col-md-4 footer-links">
+                <div class="footer-links">
                     <a href="#">关于我们</a>
                     <a href="#">联系我们</a>
                     <a href="#">花语大全</a>
@@ -154,54 +198,58 @@
                 </div>
             </div>
         </div>
+        <br>
+        <p>©2013-2021 flowerplus.cn Inc. All Rights Reserved. 上海分尚网络科技有限公司</p>
+        <p>版权所有 沪ICP备13016979 沪公网安备 31011402005615号 | 食品经营许可证编号：JY13101050027966</p>
+    
     </footer>
     <script>
         new Vue({
-                el: '#app',
-                data: {
-                    cart: [
-                        { imgUrl: "item-1.jpg", proName: "小米手环4 NFC版", proPrice: 229, quantity: 1, selected: false },
-                        { imgUrl: "img/03-car-02.png", proName: "Redmi AirDots真无线蓝牙耳机", proPrice: 99.9, quantity: 1, selected: false },
-                        { imgUrl: "img/03-car-03.png", proName: "米家蓝牙温湿度计", proPrice: 65, quantity: 1, selected: false }
-                    ],
-                    allSelected: false,
-                    modal: null
+            el: '#app',
+            data: {
+                cart: [
+                    { imgUrl: "item-1.jpg", proName: "小米手环4 NFC版", proPrice: 229, quantity: 1, selected: false },
+                    { imgUrl: "img/03-car-02.png", proName: "Redmi AirDots真无线蓝牙耳机", proPrice: 99.9, quantity: 1, selected: false },
+                    { imgUrl: "img/03-car-03.png", proName: "米家蓝牙温湿度计", proPrice: 65, quantity: 1, selected: false }
+                ],
+                allSelected: false,
+                modal: null
+            },
+            computed: {
+                totalAmount() {
+                    return this.cart.reduce((sum, item) => {
+                        return sum + (item.selected ? item.proPrice * item.quantity : 0);
+                    }, 0);
                 },
-                computed: {
-                    totalAmount() {
-                        return this.cart.reduce((sum, item) => {
-                            return sum + (item.selected ? item.proPrice * item.quantity : 0);
-                        }, 0);
-                    },
-                    selectedItems() {
-                        return this.cart.filter(item => item.selected);
+                selectedItems() {
+                    return this.cart.filter(item => item.selected);
+                }
+            },
+            methods: {
+                selectAll() {
+                    this.cart.forEach(item => {
+                        item.selected = this.allSelected;
+                    });
+                },
+                updateQuantity(item, amount) {
+                    if (item.quantity + amount > 0) {
+                        item.quantity += amount;
                     }
                 },
-                methods: {
-                    selectAll() {
-                        this.cart.forEach(item => {
-                            item.selected = this.allSelected;
-                        });
-                    },
-                    updateQuantity(item, amount) {
-                        if (item.quantity + amount > 0) {
-                            item.quantity += amount;
-                        }
-                    },
-                    removeItem(index) {
-                        this.cart.splice(index, 1);
-                    },
-                    openModal() {
-                        this.modal = new bootstrap.Modal(document.getElementById('checkoutModal'));
-                        this.modal.show();
-                    },
-                    closeModal() {
-                        if (this.modal) {
-                            this.modal.hide();
-                        }
+                removeItem(index) {
+                    this.cart.splice(index, 1);
+                },
+                openModal() {
+                    this.modal = new bootstrap.Modal(document.getElementById('checkoutModal'));
+                    this.modal.show();
+                },
+                closeModal() {
+                    if (this.modal) {
+                        this.modal.hide();
                     }
                 }
-            });
+            }
+        });
     </script>
 
 </body>

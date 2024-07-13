@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (cookieUsername || sessionUsername) {
         const userNav = document.getElementById('userNav');
         userNav.textContent = '个人中心';
-        userNav.href = '/user/toUserInfo';
+        userNav.href = '/user/userInfo';
     }
     else {
         window.location.href = '/user/login'
