@@ -196,7 +196,7 @@
                                setCookie("username",username)
                             }
                             sessionStorage.setItem('username', username);
-                            window.location.href = '/user/successLogin'; // 跳转到index.html
+                            window.location.href = '/index'; // 跳转到index.html
                         }
                         showAlert(message, result === '2' ? 'success' : 'danger');
                     })

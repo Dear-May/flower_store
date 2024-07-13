@@ -6,8 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Controller
@@ -26,19 +30,27 @@ public class UserController {
         return "login";
     }
 
-    @RequestMapping("/successLogin")
-    public String successLogin() {
-        return "index";
-    }
+    @RequestMapping("/userInfo")
+    public String userInfo() { return "userInfo";}
 
-    @RequestMapping("/successRegister")
-    public String successRegister() {
-        return "index";
-    }
+    @PostMapping("/showUserInfo")
+    public void showUserInfo(@RequestBody Map<String, Object> userInfo, HttpServletResponse response) throws IOException {
+        String userName = (String) userInfo.get("userName");
+        UserEntity result = userMapper.selectUserInfo(userName);
 
-    @RequestMapping("/toUserInfo")
-    public String toUserInfo(){
-        return "userInfo";
+        Map<String, Object> responseData = new HashMap<>();
+        if (result != null) {
+            responseData.put("status", "success");
+            responseData.put("data", result);
+        } else {
+            responseData.put("status", "fail");
+            responseData.put("message", "User not found");
+        }
+
+        // 将返回数据转换为 JSON 并写入响应
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(new com.fasterxml.jackson.databind.ObjectMapper().writeValueAsString(responseData));
     }
 
     @ResponseBody
