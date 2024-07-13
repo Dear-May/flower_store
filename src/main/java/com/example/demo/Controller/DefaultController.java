@@ -6,6 +6,7 @@ public class DefaultController {
     @RequestMapping({"/", "/index"})
     public String login() {
        return "/index";
+
     }
     @RequestMapping({"/carttest"})
     public String toCart(){

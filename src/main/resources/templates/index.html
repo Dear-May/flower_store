@@ -11,6 +11,7 @@
 	<script type="text/javascript" th:src="@{/js/jquery-3.4.1.min.js}"></script>
 	<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
 	<script type="text/javascript" th:src="@{/js/vue.js}"></script>
+
 </head>
 
 <body>
@@ -42,9 +43,10 @@
 					</div>
 				</form>
 				<div class="navbar-icons d-flex align-items-center">
-					<div class="nav-item">
-						<a class="nav-link text-white" href="/user/login">
-							<i class="bi bi-person-circle mx-2"></i>请登录
+					<div class="nav-item d-inline-flex">
+						<i class="bi bi-person-circle text-white mx-3 "></i>
+						<a class="nav-link text-white" href="/user/login" id="userNav">
+							请登录
 						</a>
 					</div>
 					<div class="nav-item">
@@ -157,6 +159,28 @@
 			</div>
 		</div>
 	</footer>
+	<script>
+		function getCookie(name) {
+			const nameEQ = name + "=";
+			const ca = document.cookie.split(';');
+			for(let i = 0; i < ca.length; i++) {
+				let c = ca[i];
+				while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+				if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+			}
+			return null;
+		}
+
+		document.addEventListener('DOMContentLoaded', function () {
+			const sessionUsername = sessionStorage.getItem('username');
+			const cookieUsername = getCookie('username');
+			if (cookieUsername || sessionUsername) {
+				const userNav = document.getElementById('userNav');
+				userNav.textContent = '个人中心';
+				userNav.href = '/user/toUserInfo';
+			}
+		})
+	</script>
 </body>
 
 </html>

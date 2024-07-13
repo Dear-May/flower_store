@@ -36,6 +36,11 @@ public class UserController {
         return "index";
     }
 
+    @RequestMapping("/toUserInfo")
+    public String toUserInfo(){
+        return "userInfo";
+    }
+
     @ResponseBody
     @RequestMapping(value = "/select", method = RequestMethod.POST)
     public String select(@RequestBody UserEntity user) {

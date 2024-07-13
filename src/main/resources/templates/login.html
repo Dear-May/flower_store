@@ -141,8 +141,33 @@
         <div id="alertPlaceholder" class="container mt-3"></div>
     </div>
     <script>
+        function setCookie(name, value) {
+            const d = new Date();
+            d.setTime(d.getTime() + (60 * 60 * 1000));
+            const expires = "expires=" + d.toUTCString();
+            document.cookie = name + "=" + value + ";" + expires + ";path=/";
+        }
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for(let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
         document.addEventListener('DOMContentLoaded', function () {
-            // 处理登录表单提交
+            // 检查sessionStorage和Cookie中是否有用户信息
+            const sessionUsername = sessionStorage.getItem('username');
+            const cookieUsername = getCookie('username');
+            if (cookieUsername) {
+                window.location.href = '/user/successLogin'
+            }
+            if (sessionUsername) {
+                window.location.href = '/user/successLogin'
+            }
+            // 处理登录注册表单提交
             document.querySelector('#loginButton').addEventListener('click', function () {
                 const form = document.querySelector('#loginForm');
                 const username = form.querySelector('input[name="username"]').value;
@@ -168,9 +193,9 @@
                         } else if (result === '2') {
                             message = '成功登录';
                             if (rememberMe) {
-                                sessionStorage.setItem('username', username);
+                               setCookie("username",username)
                             }
-                            localStorage.setItem('username', username);
+                            sessionStorage.setItem('username', username);
                             window.location.href = '/user/successLogin'; // 跳转到index.html
                         }
                         showAlert(message, result === '2' ? 'success' : 'danger');
@@ -207,8 +232,8 @@
                             message = '用户已存在';
                         } else if (result === '1') {
                             message = '成功注册';
-                            localStorage.setItem('username', username);
-                            window.location.href = '/user/successRegister'; // 跳转到index.html
+                            sessionStorage.setItem('username', username);
+                            window.location.href = '/user/successLogin'; // 跳转到index.html
                         }
                         showAlert(message, result === '1' ? 'success' : 'danger');
                     })
