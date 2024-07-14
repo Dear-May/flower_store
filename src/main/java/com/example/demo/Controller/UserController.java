@@ -124,6 +124,27 @@ public class UserController {
 
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/updateUserPassword", method = RequestMethod.POST)
+    public String updateUserPassword(@RequestBody UserEntity user) {
+        String userName = user.getUserName();
+        String userPassword = user.getUserPassword();
+        System.out.println(userName + "****" +userPassword);
+        if (userPassword==null){
+            return "密码为空";
+        }
+        try
+        {
+            String passwordMD5 = passwordMD5(userName, userPassword);
+            if(userMapper.updateUserPassword(userName, passwordMD5)){
+                return "1";
+            }
+            return "-1";
+        }catch (Exception e) {
+            return "-1";
+        }
+    }
+
     public String passwordMD5(String userName, String userPassword) {
         // 需要加密的字符串
         String src = userName + userPassword;

@@ -29,5 +29,8 @@ public interface UserMapper {
     @Update("update user set user_imgurl=#{user_imgurl} where user_name=#{user_name}")
     public boolean updateUserImgUrl(@Param("user_name") String user_name, @Param("user_imgurl") String user_imgurl);
 
+    @Update("update user set user_password=#{user_password} where user_name=#{user_name}")
+    public boolean updateUserPassword(@Param("user_name") String user_name, @Param("user_password") String user_password);
+
 }
 
