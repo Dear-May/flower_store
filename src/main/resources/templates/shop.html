@@ -25,8 +25,7 @@
         }
 
 
-
-        .breadcrumb-item+.breadcrumb-item::before {
+        .breadcrumb-item + .breadcrumb-item::before {
             content: ">";
         }
 
@@ -76,6 +75,7 @@
         .page-link {
             color: black;
         }
+
         .list-view .product-item img {
             width: 150px;
             height: auto;
@@ -85,218 +85,249 @@
 </head>
 
 <body>
-    <header>
-        <div class="header-bg">
-            <div class="container">
-                <nav class="navbar navbar-expand-lg navbar-light">
-                    <a class="navbar-brand" href="/index">花韵坊</a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+<header>
+    <div class="header-bg">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg navbar-light">
+                <a class="navbar-brand" href="/index">花韵坊</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-                        <ul class="navbar-nav">
-                            <li class="nav-item">
-                                <a class="nav-link  fs-5" href="/index">首页</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link active fs-5" href="/goods/goodslist">全部商品</a>
-                            </li>
-                        </ul>
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link  fs-5" href="/index">首页</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active fs-5" href="/goods/goodslist">全部商品</a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- 搜索框 -->
+                <form class="d-flex mx-3">
+                    <div class="input-group-diy border-0">
+                        <input type="text" class="form-control" placeholder="输入搜索内容" aria-label="搜索"
+                               aria-describedby="basic-addon2">
                     </div>
-                    <!-- 搜索框 -->
-                    <form class="d-flex mx-3">
-                        <div class="input-group-diy border-0">
-                            <input type="text" class="form-control" placeholder="输入搜索内容" aria-label="搜索"
-                                aria-describedby="basic-addon2">
-                        </div>
-                        <button class="btn-diy border-0 text-white" type="button" id="basic-addon2"><i
-                                class="bi bi-search"></i></button>
-                    </form>
-                    <div class="navbar-icons d-flex align-items-center">
-                        <div class="nav-item d-inline-flex">
-                            <i class="bi bi-person-circle text-white mx-3 "></i>
-                            <a class="nav-link text-white" href="/user/login" id="userNav">
-                                登录
-                            </a>
-                        </div>
-                        <div class="nav-item">
-                            <a class="nav-link text-white position-relative" href="/carttest">
-                                <i class="bi bi-cart4 mx-2"></i>购物车
-                            </a>
-                        </div>
+                    <button class="btn-diy border-0 text-white" type="button" id="basic-addon2"><i
+                            class="bi bi-search"></i></button>
+                </form>
+                <div class="navbar-icons d-flex align-items-center">
+                    <div class="nav-item d-inline-flex">
+                        <i class="bi bi-person-circle text-white mx-3 "></i>
+                        <a class="nav-link text-white" href="/user/login" id="userNav">
+                            登录
+                        </a>
                     </div>
-                </nav>
+                    <div class="nav-item">
+                        <a class="nav-link text-white position-relative" href="/carttest">
+                            <i class="bi bi-cart4 mx-2"></i>购物车
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+<img th:src="@{/imgs/text.png}">
+<br><br><br><br><br><br><br><br><br><br>
+<div class="container mt-4" id="app">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/index">首页</a></li>
+            <li class="breadcrumb-item active" aria-current="page">商城</li>
+        </ol>
+    </nav>
+    <h1 class="mb-4">全部商品</h1>
+    <div class="filter-bar">
+        <div>
+            <select class="form-select" aria-label="Sort by popularity" @change="sortProducts($event)">
+                <option value="default" selected>综合</option>
+                <option value="ascend">价格低-高</option>
+                <option value="descend">价格高-低</option>
+            </select>
+        </div>
+        <div class="d-flex align-items-center">
+            <select class="form-select" aria-label="Categories" @change="filterByCategory($event)">
+                <option value="all" selected>分类</option>
+                <option value="草花">草花</option>
+                <option value="玫瑰">玫瑰</option>
+                <option value="christmas">圣诞蔷薇</option>
+                <option value="potting">盆栽</option>
+                <option value="tool">工具</option>
+            </select>
+            <div class="view-switcher d-flex align-items-center">
+                <button @click="view = 'grid'" class="btn btn-outline-secondary" id="gridViewBtn"><i
+                        class="bi bi-grid-3x3-gap-fill"></i></button>
+                <button @click="view = 'list'" class="btn btn-outline-secondary" id="listViewBtn"><i
+                        class="bi bi-list"></i></button>
             </div>
         </div>
-    </header>
-    <img th:src="@{/imgs/text.png}"><br><br><br><br>><br><br><br><br><br><br>
-    <div class="container mt-4" id="app">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/index">首页</a></li>
-                <li class="breadcrumb-item active" aria-current="page">商城</li>
-            </ol>
-        </nav>
-        <h1 class="mb-4">全部商品</h1>
-        <div class="filter-bar">
-            <div>
-                <select class="form-select" aria-label="Sort by popularity">
-                    <option selected>排序</option>
-                    <option value="1">价格低-高</option>
-                    <option value="2">价格高-低</option>
-                </select>
-            </div>
-            <div class="d-flex align-items-center">
-                <select class="form-select" aria-label="Categories">
-                    <option selected>分类</option>
-                    <option value="1">草花</option>
-                    <option value="2">玫瑰</option>
-                    <option value="3">圣诞蔷薇</option>
-                </select>
-                <select class="form-select" aria-label="Price">
-                    <option selected>价格</option>
-                    <option value="1">$0 - $50</option>
-                    <option value="2">$50 - $100</option>
-                    <option value="3">$100 - $200</option>
-                </select>
-                <div class="view-switcher d-flex align-items-center">
-                    <button @click="view = 'grid'" class="btn btn-outline-secondary" id="gridViewBtn"><i
-                            class="bi bi-grid-3x3-gap-fill"></i></button>
-                    <button @click="view = 'list'" class="btn btn-outline-secondary" id="listViewBtn"><i class="bi bi-list"></i></button>
+    </div>
+    <div :class="view === 'grid' ? 'row' : 'list-view'" id="productContainer">
+        <template v-if="view === 'grid'">
+            <div v-for="product in paginatedProducts" :key="product.id" v-if="filterCategory(product.goods_category)"
+                 class="col-md-3 product-item">
+                <div class="card my-4">
+                    <img :src="product.goods_imgurl" class="card-img-top img-fluid" alt="...">
+                    <div class="card-body">
+                        <a :href="'/goods/' + product.id">
+                            <h5 class="card-title mt-2">{{ product.goods_name }}</h5>
+                        </a>
+                        <p class="card-text">{{ product.goods_describe }}</p>
+                        <p class="card-text">¥{{ product.good_price }}</p>
+                        <a href="#" class="btn btn-outline-danger">加入购物车</a>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div :class="view === 'grid' ? 'row' : 'list-view'" id="productContainer">
-            <template v-if="view === 'grid'">
-                <div v-for="product in paginatedProducts" :key="product.id" class="col-md-3 product-item">
-                    <div class="card my-4">
-                        <img :src="product.goods_imgurl" class="card-img-top img-fluid" alt="...">
-                        <div class="card-body">
+        </template>
+        <template v-else>
+            <div v-for="(productRow, rowIndex) in paginatedProductsInRows" :key="rowIndex" class="row w-100">
+                <div v-for="product in productRow" :key="product.id" v-if="filterCategory(product.goods_category)"
+                     class="col-md-6 product-item d-flex align-items-center">
+                    <div class="card my-4 d-flex flex-row align-items-center">
+                        <img :src="product.goods_imgurl" class="card-img-top img-fluid"
+                             style="width: 150px; height: auto;" alt="...">
+                        <div class="card-body flex-grow-1 ms-3">
                             <a :href="'/goods/' + product.id">
                                 <h5 class="card-title mt-2">{{ product.goods_name }}</h5>
                             </a>
                             <p class="card-text">{{ product.goods_describe }}</p>
                             <p class="card-text">¥{{ product.good_price }}</p>
-                            <a href="#" class="btn btn-outline-danger">加入购物车</a>
+                            <a href="#" class="btn btn-outline-danger btn-sm">加入购物车</a>
                         </div>
                     </div>
-                </div>
-            </template>
-            <template v-else>
-                <div v-for="(productRow, rowIndex) in paginatedProductsInRows" :key="rowIndex" class="row w-100">
-                    <div v-for="product in productRow" :key="product.id" class="col-md-6 product-item d-flex align-items-center">
-                        <div class="card my-4 d-flex flex-row align-items-center">
-                            <img :src="product.goods_imgurl" class="card-img-top img-fluid" style="width: 150px; height: auto;" alt="...">
-                            <div class="card-body flex-grow-1 ms-3">
-                                <a :href="'/goods/' + product.id">
-                                    <h5 class="card-title mt-2">{{ product.goods_name }}</h5>
-                                </a>
-                                <p class="card-text">{{ product.goods_describe }}</p>
-                                <p class="card-text">¥{{ product.good_price }}</p>
-                                <a href="#" class="btn btn-outline-danger btn-sm">加入购物车</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </template>
-        </div>
-        <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center">
-                <li class="page-item" :class="{ disabled: currentPage === 1 }">
-                    <a class="page-link" href="#" aria-label="Previous" @click.prevent="prevPage">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                <li v-for="page in totalPages" :key="page" class="page-item" :class="{ active: currentPage === page }">
-                    <a class="page-link" href="#" @click.prevent="goToPage(page)">{{ page }}</a>
-                </li>
-                <li class="page-item" :class="{ disabled: currentPage === totalPages }">
-                    <a class="page-link" href="#" aria-label="Next" @click.prevent="nextPage">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </div>
-    <footer class="footer mt-5">
-        <div class="container">
-            <div class="row">
-                <div class="footer-links">
-                    <a href="#">关于我们</a>
-                    <a href="#">联系我们</a>
-                    <a href="#">花语大全</a>
-                    <a href="#">购物指南</a>
                 </div>
             </div>
+        </template>
+    </div>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" :class="{ disabled: currentPage === 1 }">
+                <a class="page-link" href="#" aria-label="Previous" @click.prevent="prevPage">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li v-for="page in totalPages" :key="page" class="page-item" :class="{ active: currentPage === page }">
+                <a class="page-link" href="#" @click.prevent="goToPage(page)">{{ page }}</a>
+            </li>
+            <li class="page-item" :class="{ disabled: currentPage === totalPages }">
+                <a class="page-link" href="#" aria-label="Next" @click.prevent="nextPage">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+<footer class="footer mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="footer-links">
+                <a href="#">关于我们</a>
+                <a href="#">联系我们</a>
+                <a href="#">花语大全</a>
+                <a href="#">购物指南</a>
+            </div>
         </div>
-        <br>
-        <!-- <p>©2013-2021 flowerplus.cn Inc. All Rights Reserved. 上海分尚网络科技有限公司</p>
-        		<p>版权所有 沪ICP备13016979 沪公网安备 31011402005615号 | 食品经营许可证编号：JY13101050027966</p> -->
+    </div>
+    <br>
+    <!-- <p>©2013-2021 flowerplus.cn Inc. All Rights Reserved. 上海分尚网络科技有限公司</p>
+            <p>版权所有 沪ICP备13016979 沪公网安备 31011402005615号 | 食品经营许可证编号：JY13101050027966</p> -->
 
-    </footer>
-    <script>
-        new Vue({
-            el: '#app',
-            data: {
-                view: 'grid',
-                products: [],
-                currentPage: 1,
-                itemsPerPage: 8
+</footer>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            view: 'grid',
+            products: [],
+            sortOrder: 'default', // 默认排序方式
+            selectedCategory: 'all', // 默认分类
+            currentPage: 1,
+            itemsPerPage: 8
+        },
+        computed: {
+            totalPages() {
+                return Math.ceil(this.filteredProducts.length / this.itemsPerPage);
             },
-            computed: {
-                totalPages() {
-                    return Math.ceil(this.products.length / this.itemsPerPage);
-                },
-                paginatedProducts() {
-                    const start = (this.currentPage - 1) * this.itemsPerPage;
-                    const end = start + this.itemsPerPage;
-                    return this.products.slice(start, end);
-                },
-                paginatedProductsInRows() {
-                    const rows = [];
-                    for (let i = 0; i < this.paginatedProducts.length; i += 2) {
-                        rows.push(this.paginatedProducts.slice(i, i + 2));
-                    }
-                    return rows;
+            paginatedProducts() {
+                const start = (this.currentPage - 1) * this.itemsPerPage;
+                const end = start + this.itemsPerPage;
+                return this.filteredProducts.slice(start, end);
+            },
+            paginatedProductsInRows() {
+                const rows = [];
+                for (let i = 0; i < this.paginatedProducts.length; i += 2) {
+                    rows.push(this.paginatedProducts.slice(i, i + 2));
                 }
+                return rows;
             },
-            methods: {
-                async fetchProducts() {
-                    try {
-                        const response = await axios.post('/goods/getgoods');
-
-                        this.products = response.data;
-                        console.log(this.products)
-                    } catch (error) {
-                        console.error('Error fetching products:', error);
-                    }
-                },
-                goToPage(page) {
-                    this.currentPage = page;
-                },
-                prevPage() {
-                    if (this.currentPage > 1) {
-                        this.currentPage--;
-                    }
-                },
-                nextPage() {
-                    if (this.currentPage < this.totalPages) {
-                        this.currentPage++;
-                    }
-                },
-                switchToGridView() {
-                    this.view = 'grid';
-                },
-                switchToListView() {
-                    this.view = 'list';
+            filteredProducts() {
+                if (this.selectedCategory === 'all') {
+                    return this.products;
+                } else {
+                    return this.products.filter(product => product.goods_category === this.selectedCategory);
                 }
-            },
-            mounted() {
-                this.fetchProducts();
             }
-        });
-    </script>
+        },
+        methods: {
+            async fetchProducts() {
+                try {
+                    let endpoint;
+                    switch (this.sortOrder) {
+                        case 'ascend':
+                            endpoint = '/goods/getgoodsascend';
+                            break;
+                        case 'descend':
+                            endpoint = '/goods/getgoodsdescend';
+                            break;
+                        default:
+                            endpoint = '/goods/getgoods'; // 假设这是默认排序的API端点
+                            break;
+                    }
+                    const response = await axios.post(endpoint);
+                    this.products = response.data;
+                } catch (error) {
+                    console.error('Error fetching products:', error);
+                }
+            },
+            sortProducts(event) {
+                this.sortOrder = event.target.value;
+                this.fetchProducts();
+            },
+            filterByCategory(event) {
+                this.selectedCategory = event.target.value;
+                this.currentPage = 1; // 重置分页器当前页
+            },
+            filterCategory(category) {
+                return this.selectedCategory === 'all' || category === this.selectedCategory;
+            },
+            goToPage(page) {
+                this.currentPage = page;
+            },
+            prevPage() {
+                if (this.currentPage > 1) {
+                    this.currentPage--;
+                }
+            },
+            nextPage() {
+                if (this.currentPage < this.totalPages) {
+                    this.currentPage++;
+                }
+            },
+            switchToGridView() {
+                this.view = 'grid';
+            },
+            switchToListView() {
+                this.view = 'list';
+            }
+        },
+        mounted() {
+            this.fetchProducts();
+        }
+    });
+</script>
 </body>
 
 </html>
