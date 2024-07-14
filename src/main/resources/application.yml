@@ -9,11 +9,22 @@ mybatis:
   type-aliases-package: com.example.demo.mybatis.entity
 
 
+
 spring:
   application:
     name: SpringBoot-demo
   profiles:
     active: jdbc
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
 
 
-
+# FTP 配置
+ftp:
+  host: 141.11.86.64
+  port: 21
+  username: yueyue
+  password: NxLJEGPAfNT7HE7D
+  upload-dir: /

@@ -14,14 +14,6 @@ public class UserEntity {
         this.userName = userName;
     }
 
-    public String getUserImage() {
-        return userImage;
-    }
-
-    public void setUserImage(String userImage) {
-        this.userImage = userImage;
-    }
-
     public String getUserPassword() {
         return userPassword;
     }
@@ -33,6 +25,14 @@ public class UserEntity {
     public String getUserPhone() { return userPhone;}
 
     public void setUserPhone(String userPhone) { this.userPhone = userPhone; }
+
+    public String getUserImage() {
+        return userImage;
+    }
+
+    public void setUserImage(String userImage) {
+        this.userImage = userImage;
+    }
 
     @Override
     public String toString() {

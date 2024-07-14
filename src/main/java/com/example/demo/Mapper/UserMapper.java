@@ -15,7 +15,7 @@ public interface UserMapper {
             @Result(property = "userImage", column = "user_imgurl"),
             @Result(property = "userPhone", column = "user_phone"),
     })
-    UserEntity selectUserInfo(@Param("userName") String userName);
+    public UserEntity selectUserInfo(@Param("userName") String userName);
 
     @Select("select user_name from user where user_name = #{userName}")
     public String selectUserName(String userName);
@@ -25,6 +25,9 @@ public interface UserMapper {
 
     @Insert("insert into user(user_name, user_password) values(#{userName}, #{userPassword})")
     public void addUser(@Param("userName") String userName, @Param("userPassword") String userPassword);
+
+    @Update("update user set user_imgurl=#{user_imgurl} where user_name=#{user_name}")
+    public boolean updateUserImgUrl(@Param("user_name") String user_name, @Param("user_imgurl") String user_imgurl);
 
 }
 
