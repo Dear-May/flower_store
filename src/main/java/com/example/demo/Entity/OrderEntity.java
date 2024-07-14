@@ -31,9 +31,9 @@ public class OrderEntity {
     public String toString() {
         return "OrderEntity{" +
                 "id=" + id +
-                ", userId=" + userId +'\''+
+                ", userId='" + userId +'\''+
                 ", orderTime='" + orderTime + '\'' +
-                ", orderStatus='" + orderStatus + '\'' +
+                ", orderStatus=''" + orderStatus + '\'' +
                 ", orderPrice=" + orderPrice +
                 '}';
     }

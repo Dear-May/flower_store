@@ -1,7 +1,5 @@
 package com.example.demo.Entity;
 
-import org.springframework.web.multipart.MultipartFile;
-
 public class GoodEntity {
     private int id;
     private String goods_name;
@@ -9,7 +7,7 @@ public class GoodEntity {
     private String good_price;
     private String goods_category;
     private String goods_state;
-    private String goods_imgFile;
+    private String goods_imgurl;
 
 
 
@@ -61,12 +59,12 @@ public class GoodEntity {
         this.goods_state = goods_state;
     }
 
-    public String getGoods_imgFile() {
-        return goods_imgFile;
+    public String getGoods_imgurl() {
+        return goods_imgurl;
     }
 
-    public void setGoods_imgFile(String goods_imgFile) {
-        this.goods_imgFile = goods_imgFile;
+    public void setGoods_imgurl(String goods_imgurl) {
+        this.goods_imgurl = goods_imgurl;
     }
 
     @Override
@@ -78,7 +76,7 @@ public class GoodEntity {
                 ", good_price='" + good_price + '\'' +
                 ", goods_category='" + goods_category + '\'' +
                 ", goods_state='" + goods_state + '\'' +
-                ", goods_imgFile=" + goods_imgFile +
+                ", goods_imgurl=" + goods_imgurl +
                 '}';
     }
 }

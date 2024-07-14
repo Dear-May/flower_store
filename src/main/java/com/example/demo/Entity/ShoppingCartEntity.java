@@ -4,6 +4,7 @@ public class ShoppingCartEntity {
     private int id;
     private int user_id;
     private int cart_goodid;
+    private int cart_goodnum;
     private int order_id;
 
     public int getId() {
@@ -30,6 +31,10 @@ public class ShoppingCartEntity {
         this.cart_goodid = cart_goodid;
     }
 
+    public int getCart_goodnum() { return cart_goodnum; }
+
+    public void setCart_goodnum(int cart_goodnum) { this.cart_goodnum = cart_goodnum; }
+
     public int getOrder_id() {
         return order_id;
     }
@@ -41,10 +46,11 @@ public class ShoppingCartEntity {
     @Override
     public String toString() {
         return "ShoppingCartEntity{" +
-                "id=" + id +
-                ", user_id=" + user_id +
-                ", cart_goodid=" + cart_goodid +
-                ", order_id=" + order_id +
+                "id='" + id + '\'' +
+                ", user_id='" + user_id + '\'' +
+                ", cart_goodid='" + cart_goodid + '\'' +
+                ", cart_goodnum'=" + cart_goodnum + '\'' +
+                ", order_id='" + order_id + '\'' +
                 '}';
     }
 }

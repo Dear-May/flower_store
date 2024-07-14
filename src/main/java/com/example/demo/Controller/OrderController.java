@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -21,14 +22,11 @@ public class OrderController {
     @Autowired
     UserMapper userMapper;
 
-    @RequestMapping("/orderList")
+    @RequestMapping(value="/orderList", method = RequestMethod.POST)
     public void orderList(@RequestBody Map<String, Object> userInfo, HttpServletResponse response) throws IOException {
         String userName = (String) userInfo.get("userName");
         int userID = userMapper.selectUserId(userName);
         List<OrderEntity> orderList = orderMapper.selectByUserId(userID);
-        for (OrderEntity order : orderList) {
-            System.out.println(order.getId() + " " + order.getOrderPrice() + " " + order.getOrderStatus()+ " "+order.getOrderTime());
-        }
         response.setContentType("text/json;charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(orderList.toString());

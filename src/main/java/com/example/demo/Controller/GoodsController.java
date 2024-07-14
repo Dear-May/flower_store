@@ -115,7 +115,7 @@ public class GoodsController {
         String goodsDes=good.getGoods_describe();
         String goodPrice=good.getGood_price();
         String goodCate=good.getGoods_category();
-        String ImgFile=good.getGoods_imgFile();
+        String ImgFile=good.getGoods_imgurl();
         if(goodsName==null||goodsDes==null||goodPrice==null||goodCate==null||ImgFile==null)
         {
             return "-1";//提示不能为空

@@ -1,41 +1,64 @@
 package com.example.demo.Controller;
 
 import com.example.demo.Entity.GoodEntity;
-import com.example.demo.Entity.GoodEntityGet;
+import com.example.demo.Entity.ShoppingCartEntity;
 import com.example.demo.Mapper.GoodsMapper;
 import com.example.demo.Mapper.ShoppingCartMapper;
+import com.example.demo.Mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.*;
 
 @Controller
 @RequestMapping("/cart")
 public class CartController {
     @Autowired
     ShoppingCartMapper shoppingCartMapper;
+    @Autowired
+    UserMapper userMapper;
+    @Autowired
+    GoodsMapper goodsMapper;
 
 
     @ResponseBody
-    @RequestMapping(value = "/getcartgood", method = RequestMethod.GET)//获取当前购物车所有商品
-    public Map<GoodEntityGet,Integer> getCartgood( @RequestParam(value = "userId", required = false) int userId) {
-        Map<GoodEntityGet,Integer> map =new HashMap<>();
-        List<GoodEntityGet> list=shoppingCartMapper.findPersonalGoodInCart(userId);
-        for(int i=0;i<list.size();i++)
-        {
-            int num=shoppingCartMapper.getgoodnumber(userId,list.get(i).getId());
-            map.put(list.get(i),num);
+    @RequestMapping(value = "/getcartgood", method = RequestMethod.POST)//获取当前购物车所有商品
+    public void getCartgood(@RequestBody Map<String, Object> userInfo, HttpServletResponse response) throws IOException {
+        String userName = (String) userInfo.get("userName");
+        int userId = userMapper.selectUserId(userName);
+        List<ShoppingCartEntity> cartList = shoppingCartMapper.getCartList(userId);
+        List<Integer> goodsIds = new ArrayList<>();
+        for(ShoppingCartEntity cart:cartList){
+            goodsIds.add(cart.getCart_goodid());
         }
-        System.out.println(list);
-        System.out.println(map);
-        return map;
+        List<GoodEntity> goodInfos = new ArrayList<>();
+        for(int id:goodsIds){
+            GoodEntity goodentity = goodsMapper.selectGoodInoById(id);
+            goodInfos.add(goodentity);
+        }
+
+        List<Map<String, Object>> cartListMap = getMaps(cartList, goodInfos);
+
+        response.setContentType("text/json;charset=UTF-8");
+        response.getWriter().write(cartListMap.toString());
+
+    }
+
+    private static List<Map<String, Object>> getMaps(List<ShoppingCartEntity> cartList, List<GoodEntity> goodInfos) {
+        List<Map<String, Object>> cartListMap = new ArrayList<>();
+        for(int i = 0; i< cartList.size(); i++){
+            Map<String, Object> cartMap = new HashMap<>();
+            cartMap.put("cart_goodid", cartList.get(i).getCart_goodid());
+            cartMap.put("cart_goodname", goodInfos.get(i).getGoods_name());
+            cartMap.put("cart_goodprice", goodInfos.get(i).getGood_price());
+            cartMap.put("cart_goodimage", "\""+goodInfos.get(i).getGoods_imgurl()+"\"");
+            cartMap.put("cart_goodnumber", cartList.get(i).getCart_goodnum());
+            cartListMap.add(cartMap);
+        }
+        return cartListMap;
     }
 
     @ResponseBody
