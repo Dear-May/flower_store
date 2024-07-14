@@ -14,6 +14,7 @@
     <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/vue.js}"></script>
     <script type="text/javascript" th:src="@{/js/public.js}"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <style>
         body {
             font-family: Arial, Helvetica, sans-serif;
@@ -79,6 +80,7 @@
             width: 150px;
             height: auto;
         }
+
     </style>
 </head>
 
@@ -162,9 +164,6 @@
                     <button @click="view = 'grid'" class="btn btn-outline-secondary" id="gridViewBtn"><i
                             class="bi bi-grid-3x3-gap-fill"></i></button>
                     <button @click="view = 'list'" class="btn btn-outline-secondary" id="listViewBtn"><i class="bi bi-list"></i></button>
-<!--                    <button class="btn btn-outline-secondary" id="gridViewBtn"><i-->
-<!--                            class="bi bi-grid-3x3-gap-fill"></i></button>-->
-<!--                    <button class="btn btn-outline-secondary" id="listViewBtn"><i class="bi bi-list"></i></button>-->
                 </div>
             </div>
         </div>
@@ -172,13 +171,13 @@
             <template v-if="view === 'grid'">
                 <div v-for="product in paginatedProducts" :key="product.id" class="col-md-3 product-item">
                     <div class="card my-4">
-                        <img :src="product.img" class="card-img-top img-fluid" alt="...">
+                        <img :src="product.goods_imgurl" class="card-img-top img-fluid" alt="...">
                         <div class="card-body">
-                            <a :href="product.link">
-                                <h5 class="card-title mt-2">{{ product.title }}</h5>
+                            <a :href="'/goods/' + product.id">
+                                <h5 class="card-title mt-2">{{ product.goods_name }}</h5>
                             </a>
-                            <p class="card-text">{{ product.description }}</p>
-                            <p class="card-text">{{ product.price }}</p>
+                            <p class="card-text">{{ product.goods_describe }}</p>
+                            <p class="card-text">¥{{ product.good_price }}</p>
                             <a href="#" class="btn btn-outline-danger">加入购物车</a>
                         </div>
                     </div>
@@ -188,13 +187,13 @@
                 <div v-for="(productRow, rowIndex) in paginatedProductsInRows" :key="rowIndex" class="row w-100">
                     <div v-for="product in productRow" :key="product.id" class="col-md-6 product-item d-flex align-items-center">
                         <div class="card my-4 d-flex flex-row align-items-center">
-                            <img :src="product.img" class="card-img-top img-fluid" style="width: 150px; height: auto;" alt="...">
+                            <img :src="product.goods_imgurl" class="card-img-top img-fluid" style="width: 150px; height: auto;" alt="...">
                             <div class="card-body flex-grow-1 ms-3">
-                                <a :href="product.link">
-                                    <h5 class="card-title mt-2">{{ product.title }}</h5>
+                                <a :href="'/goods/' + product.id">
+                                    <h5 class="card-title mt-2">{{ product.goods_name }}</h5>
                                 </a>
-                                <p class="card-text">{{ product.description }}</p>
-                                <p class="card-text">{{ product.price }}</p>
+                                <p class="card-text">{{ product.goods_describe }}</p>
+                                <p class="card-text">¥{{ product.good_price }}</p>
                                 <a href="#" class="btn btn-outline-danger btn-sm">加入购物车</a>
                             </div>
                         </div>
@@ -220,7 +219,6 @@
             </ul>
         </nav>
     </div>
-    </div>
     <footer class="footer mt-5">
         <div class="container">
             <div class="row">
@@ -242,18 +240,7 @@
             el: '#app',
             data: {
                 view: 'grid',
-                products: [
-                    { id: 1, img: 'https://yueyue0313.dynv6.net:8008/A001.png', title: '用心爱你', description: '与您相守，直到天荒地老；99枝：33枝粉玫瑰 + 66枝卡罗拉红玫瑰', price: '¥659', link: '/goods/goodinfo' },
-                    { id: 2, img: 'https://yueyue0313.dynv6.net:8008/A002.png', title: 'Armor Okwahn II', description: '与您相守，直到天荒地老；99枝：33枝粉玫瑰 + 66枝卡罗拉红玫瑰', price: '¥90.00', link: '#' },
-                    { id: 3, img: 'https://yueyue0313.dynv6.net:8008/A003.png', title: 'Armor Air Wildwood ACG', description: '与您相守，直到天荒地老；99枝：33枝粉玫瑰 + 66枝卡罗拉红玫瑰', price: '¥75.00', link: '#' },
-                    { id: 4, img: 'https://yueyue0313.dynv6.net:8008/A004.png', title: 'Armor ACG React Terra', description: '与您相守，直到天荒地老；99枝：33枝粉玫瑰 + 66枝卡罗拉红玫瑰', price: '¥110.00', link: '#' },
-                    { id: 5, img: 'https://yueyue0313.dynv6.net:8008/A005.png', title: '用心爱你', description: '与您相守，直到天荒地老；99枝：33枝粉玫瑰 + 66枝卡罗拉红玫瑰', price: '¥659', link: '#' },
-                    { id: 6, img: 'https://yueyue0313.dynv6.net:8008/B001.png', title: 'Armor Okwahn II', description: '与您相守，直到天荒地老；99枝：33枝粉玫瑰 + 66枝卡罗拉红玫瑰', price: '¥90.00', link: '#' },
-                    { id: 7, img: 'https://yueyue0313.dynv6.net:8008/B002.png', title: 'Armor Air Wildwood ACG', description: '与您相守，直到天荒地老；99枝：33枝粉玫瑰 + 66枝卡罗拉红玫瑰', price: '¥75.00', link: '#' },
-                    { id: 8, img: 'https://yueyue0313.dynv6.net:8008/B003.png', title: 'Armor ACG React Terra', description: '与您相守，直到天荒地老；99枝：33枝粉玫瑰 + 66枝卡罗拉红玫瑰', price: '¥110.00', link: '#' },
-                    { id: 9, img: 'https://yueyue0313.dynv6.net:8008/B004.png', title: '用心爱你', description: '与您相守，直到天荒地老；99枝：33枝粉玫瑰 + 66枝卡罗拉红玫瑰', price: '¥659', link: '#' },
-                    { id: 10, img: 'https://yueyue0313.dynv6.net:8008/B005.png', title: 'Armor Okwahn II', description: '与您相守，直到天荒地老；99枝：33枝粉玫瑰 + 66枝卡罗拉红玫瑰', price: '¥90.00', link: '#' }
-                ],
+                products: [],
                 currentPage: 1,
                 itemsPerPage: 8
             },
@@ -275,6 +262,16 @@
                 }
             },
             methods: {
+                async fetchProducts() {
+                    try {
+                        const response = await axios.post('/goods/getgoods');
+
+                        this.products = response.data;
+                        console.log(this.products)
+                    } catch (error) {
+                        console.error('Error fetching products:', error);
+                    }
+                },
                 goToPage(page) {
                     this.currentPage = page;
                 },
@@ -294,6 +291,9 @@
                 switchToListView() {
                     this.view = 'list';
                 }
+            },
+            mounted() {
+                this.fetchProducts();
             }
         });
     </script>
