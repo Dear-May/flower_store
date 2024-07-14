@@ -250,8 +250,7 @@
                     if (this.selectedFile) {
                         const formData = new FormData();
                         formData.append('avatar', this.selectedFile);
-                        formData.append('username', localStorage.getItem('username')); // 假设需要发送用户名
-
+                        formData.append('username', sessionStorage.getItem('username')); // 假设需要发送用户名
                         axios.post('/api/uploadAvatar', formData, {
                             headers: {
                                 'Content-Type': 'multipart/form-data'
