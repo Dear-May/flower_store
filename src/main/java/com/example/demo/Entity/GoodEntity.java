@@ -9,7 +9,7 @@ public class GoodEntity {
     private String good_price;
     private String goods_category;
     private String goods_state;
-    private MultipartFile goods_imgFile;
+    private String goods_imgFile;
 
 
 
@@ -61,11 +61,11 @@ public class GoodEntity {
         this.goods_state = goods_state;
     }
 
-    public MultipartFile getGoods_imgFile() {
+    public String getGoods_imgFile() {
         return goods_imgFile;
     }
 
-    public void setGoods_imgFile(MultipartFile goods_imgFile) {
+    public void setGoods_imgFile(String goods_imgFile) {
         this.goods_imgFile = goods_imgFile;
     }
 

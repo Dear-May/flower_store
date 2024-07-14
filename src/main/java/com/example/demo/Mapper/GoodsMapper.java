@@ -27,8 +27,11 @@ public interface GoodsMapper {
     @Insert("insert into goods(goods_name, goods_describe,good_price,goods_category,goods_imgurl) values(#{goods_name}, #{goods_describe}, #{good_price}, #{goods_category}, #{goods_imgurl})")
     public boolean addGoods(@Param("goods_name") String goods_name, @Param("goods_describe") String goods_describe, @Param("good_price") String good_price, @Param("goods_category") String goods_category, @Param("goods_imgurl") String goods_imgurl);
 
-    @Select("select * from goods")
-    public List<GoodEntity> selectGood();
+    @Select("select * from goods order by good_price desc")
+    public List<GoodEntity> selectGoodDescend();
+
+    @Select("select * from goods order by good_price asc")
+    public List<GoodEntity> selectGoodAscend();
 
     @Select("select * from goods where goods_category=#{goods_category}")
     public List<GoodEntity> selectGoodByCate(@Param("goods_category") String goods_category);

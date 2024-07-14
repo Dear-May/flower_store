@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import com.example.demo.Mapper.GoodsMapper;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +22,7 @@ public class GoodsController {
     @RequestMapping("/goodslist")
     public String goodsList() {
         return "shop";
-    }//返回GoodsList页面，然后在GoodList页面启动时，到getGoods控制器查询数据，并将数据返回
+    }
 
 
     @RequestMapping("/goodinfo")
@@ -113,13 +115,13 @@ public class GoodsController {
         String goodsDes=good.getGoods_describe();
         String goodPrice=good.getGood_price();
         String goodCate=good.getGoods_category();
-        MultipartFile ImgFile=good.getGoods_imgFile();
+        String ImgFile=good.getGoods_imgFile();
         if(goodsName==null||goodsDes==null||goodPrice==null||goodCate==null||ImgFile==null)
         {
             return "-1";//提示不能为空
         }
         else{
-            String goodImgUrl=uploadImg(ImgFile);//上传到服务器并获取图片
+            String goodImgUrl=null;//上传到服务器并获取图片
             boolean flag=goodsMapper.addGoods(goodsName,goodsDes,goodPrice,goodCate,goodImgUrl);
             if(flag)
             {
@@ -134,12 +136,19 @@ public class GoodsController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/getGoods", method = RequestMethod.GET)//获取所有商品
-    public List<GoodEntity> getGoods() {
-        List<GoodEntity>  goodlist=goodsMapper.selectGood();
-        System.out.println(goodlist);
-        System.out.println(goodlist);
-        return goodlist;
+    @RequestMapping(value = "/getgoodsdescend", method = RequestMethod.POST)
+    public void getGoodsDescend(HttpServletResponse response) throws IOException {
+        List<GoodEntity>  goodlist=goodsMapper.selectGoodDescend();
+        response.setContentType("text/json;charset=UTF-8");
+        response.getWriter().write(goodlist.toString());
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/getgoodsascend", method = RequestMethod.POST)
+    public void getGoodsAscend(HttpServletResponse response) throws IOException {
+        List<GoodEntity>  goodlist=goodsMapper.selectGoodAscend();
+        response.setContentType("text/json;charset=UTF-8");
+        response.getWriter().write(goodlist.toString());
     }
 
     @ResponseBody
