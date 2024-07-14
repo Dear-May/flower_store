@@ -52,6 +52,7 @@ public class CartController {
         List<Map<String, Object>> cartListMap = new ArrayList<>();
         for(int i = 0; i< cartList.size(); i++){
             Map<String, Object> cartMap = new HashMap<>();
+            cartMap.put("cart_id", cartList.get(i).getId());
             cartMap.put("cart_goodid", cartList.get(i).getCart_goodid());
             cartMap.put("cart_goodname", goodInfos.get(i).getGoods_name());
             cartMap.put("cart_goodprice", goodInfos.get(i).getGood_price());
@@ -66,6 +67,7 @@ public class CartController {
         for (int i = 0; i < cartListMap.size(); i++) {
             Map<String, Object> cartMap = cartListMap.get(i);
             jsonBuilder.append("{");
+            jsonBuilder.append("\"cart_id\":").append(cartMap.get("cart_id")).append(",");
             jsonBuilder.append("\"cart_goodid\":").append(cartMap.get("cart_goodid")).append(",");
             jsonBuilder.append("\"cart_goodname\":\"").append(cartMap.get("cart_goodname")).append("\",");
             jsonBuilder.append("\"cart_goodprice\":").append(cartMap.get("cart_goodprice")).append(",");
