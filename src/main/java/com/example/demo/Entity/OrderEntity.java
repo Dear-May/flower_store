@@ -30,11 +30,11 @@ public class OrderEntity {
     @Override
     public String toString() {
         return "{" +
-                "id=" + id +
-                ", userId='" + userId +'\''+
-                ", orderTime='" + orderTime + '\'' +
-                ", orderStatus=''" + orderStatus + '\'' +
-                ", orderPrice=" + orderPrice +
-                '}';
+                "\"id\": " + id + "," +
+                "\"userId\": \"" + userId + "\"," +
+                "\"orderTime\": \"" + orderTime + "\"," +
+                "\"orderStatus\": \"" + orderStatus + "\"," +
+                "\"orderPrice\": " + orderPrice +
+                "}";
     }
 }

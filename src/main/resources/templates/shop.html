@@ -75,6 +75,10 @@
         .page-link {
             color: black;
         }
+        .list-view .product-item img {
+            width: 150px;
+            height: auto;
+        }
     </style>
 </head>
 
@@ -100,12 +104,12 @@
                     </div>
                     <!-- 搜索框 -->
                     <form class="d-flex mx-3">
-                        <div class="input-group border-0">
+                        <div class="input-group-diy border-0">
                             <input type="text" class="form-control" placeholder="输入搜索内容" aria-label="搜索"
                                 aria-describedby="basic-addon2">
-                            <button class="btn btn-light border-0 text-white" type="button" id="basic-addon2"><i
-                                    class="bi bi-search"></i></button>
                         </div>
+                        <button class="btn-diy border-0 text-white" type="button" id="basic-addon2"><i
+                                class="bi bi-search"></i></button>
                     </form>
                     <div class="navbar-icons d-flex align-items-center">
                         <div class="nav-item d-inline-flex">
@@ -125,7 +129,7 @@
         </div>
     </header>
     <img th:src="@{/imgs/text.png}"><br><br><br><br>><br><br><br><br><br><br>
-    <div class="container mt-4">
+    <div class="container mt-4" id="app">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/index">首页</a></li>
@@ -148,12 +152,6 @@
                     <option value="2">玫瑰</option>
                     <option value="3">圣诞蔷薇</option>
                 </select>
-                <select class="form-select" aria-label="Color">
-                    <option selected>颜色</option>
-                    <option value="1">Black</option>
-                    <option value="2">White</option>
-                    <option value="3">Red</option>
-                </select>
                 <select class="form-select" aria-label="Price">
                     <option selected>价格</option>
                     <option value="1">$0 - $50</option>
@@ -161,123 +159,67 @@
                     <option value="3">$100 - $200</option>
                 </select>
                 <div class="view-switcher d-flex align-items-center">
-                    <button class="btn btn-outline-secondary" id="gridViewBtn"><i
+                    <button @click="view = 'grid'" class="btn btn-outline-secondary" id="gridViewBtn"><i
                             class="bi bi-grid-3x3-gap-fill"></i></button>
-                    <button class="btn btn-outline-secondary" id="listViewBtn"><i class="bi bi-list"></i></button>
+                    <button @click="view = 'list'" class="btn btn-outline-secondary" id="listViewBtn"><i class="bi bi-list"></i></button>
+<!--                    <button class="btn btn-outline-secondary" id="gridViewBtn"><i-->
+<!--                            class="bi bi-grid-3x3-gap-fill"></i></button>-->
+<!--                    <button class="btn btn-outline-secondary" id="listViewBtn"><i class="bi bi-list"></i></button>-->
                 </div>
             </div>
         </div>
-        <div class="row" id="productContainer">
-            <!-- 商品卡片开始 -->
-            <div class="col-md-3 product-item">
-                <div class="card my-4">
-                    <img th:src="@{/imgs/item-1.jpg}" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <a href="/goods/goodinfo">
-                            <h5 class="card-title mt-2">用心爱你</h5>
-                        </a>
-                        <p class="card-text">与您相守，直到天荒地老；99枝：33枝粉玫瑰 + 66枝卡罗拉红玫瑰</p>
-                        <p class="card-text">¥659</p>
-                        <a href="#" class="btn btn-outline-danger">加入购物车</a>
+        <div :class="view === 'grid' ? 'row' : 'list-view'" id="productContainer">
+            <template v-if="view === 'grid'">
+                <div v-for="product in paginatedProducts" :key="product.id" class="col-md-3 product-item">
+                    <div class="card my-4">
+                        <img :src="product.img" class="card-img-top img-fluid" alt="...">
+                        <div class="card-body">
+                            <a :href="product.link">
+                                <h5 class="card-title mt-2">{{ product.title }}</h5>
+                            </a>
+                            <p class="card-text">{{ product.description }}</p>
+                            <p class="card-text">{{ product.price }}</p>
+                            <a href="#" class="btn btn-outline-danger">加入购物车</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-3 product-item">
-                <div class="card my-4">
-                    <img th:src="@{/imgs/item-2.jpg}" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title mt-2">Armor Okwahn II</h5>
-                        <p class="card-text">与您相守，直到天荒地老；99枝：33枝粉玫瑰 + 66枝卡罗拉红玫瑰</p>
-                        <p class="card-text">¥90.00</p>
-                        <a href="#" class="btn btn-outline-danger">加入购物车</a>
+            </template>
+            <template v-else>
+                <div v-for="(productRow, rowIndex) in paginatedProductsInRows" :key="rowIndex" class="row w-100">
+                    <div v-for="product in productRow" :key="product.id" class="col-md-6 product-item d-flex align-items-center">
+                        <div class="card my-4 d-flex flex-row align-items-center">
+                            <img :src="product.img" class="card-img-top img-fluid" style="width: 150px; height: auto;" alt="...">
+                            <div class="card-body flex-grow-1 ms-3">
+                                <a :href="product.link">
+                                    <h5 class="card-title mt-2">{{ product.title }}</h5>
+                                </a>
+                                <p class="card-text">{{ product.description }}</p>
+                                <p class="card-text">{{ product.price }}</p>
+                                <a href="#" class="btn btn-outline-danger btn-sm">加入购物车</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-3 product-item">
-                <div class="card my-4">
-                    <img th:src="@{imgs/item-3.jpg}" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title mt-2">Armor Air Wildwood ACG</h5>
-                        <p class="card-text">与您相守，直到天荒地老；99枝：33枝粉玫瑰 + 66枝卡罗拉红玫瑰</p>
-                        <p class="card-text">¥75.00</p>
-                        <a href="#" class="btn btn-outline-danger">加入购物车</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 product-item">
-                <div class="card my-4">
-                    <img th:src="@{imgs/item-4.jpg}" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title mt-2">Armor ACG React Terra</h5>
-                        <p class="card-text">与您相守，直到天荒地老；99枝：33枝粉玫瑰 + 66枝卡罗拉红玫瑰</p>
-                        <p class="card-text">¥110.00</p>
-                        <a href="#" class="btn btn-outline-danger">加入购物车</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 product-item">
-                <div class="card my-4">
-                    <img th:src="@{/imgs/item-1.jpg}" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title mt-2">用心爱你</h5>
-                        <p class="card-text">与您相守，直到天荒地老；99枝：33枝粉玫瑰 + 66枝卡罗拉红玫瑰</p>
-                        <p class="card-text">¥659</p>
-                        <a href="#" class="btn btn-outline-danger">加入购物车</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 product-item">
-                <div class="card my-4">
-                    <img th:src="@{/imgs/item-2.jpg}" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title mt-2">Armor Okwahn II</h5>
-                        <p class="card-text">与您相守，直到天荒地老；99枝：33枝粉玫瑰 + 66枝卡罗拉红玫瑰</p>
-                        <p class="card-text">¥90.00</p>
-                        <a href="#" class="btn btn-outline-danger">加入购物车</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 product-item">
-                <div class="card my-4">
-                    <img th:src="@{/imgs/item-3.jpg}" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title mt-2">Armor Air Wildwood ACG</h5>
-                        <p class="card-text">与您相守，直到天荒地老；99枝：33枝粉玫瑰 + 66枝卡罗拉红玫瑰</p>
-                        <p class="card-text">¥75.00</p>
-                        <a href="#" class="btn btn-outline-danger">加入购物车</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 product-item">
-                <div class="card my-4">
-                    <img th:src="@{/imgs/item-4.jpg}" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title mt-2">Armor ACG React Terra</h5>
-                        <p class="card-text">与您相守，直到天荒地老；99枝：33枝粉玫瑰 + 66枝卡罗拉红玫瑰</p>
-                        <p class="card-text">¥110.00</p>
-                        <a href="#" class="btn btn-outline-danger">加入购物车</a>
-                    </div>
-                </div>
-            </div>
-            <!-- 继续添加更多商品卡片 -->
-            <nav aria-label="Page navigation example">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+            </template>
         </div>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" :class="{ disabled: currentPage === 1 }">
+                    <a class="page-link" href="#" aria-label="Previous" @click.prevent="prevPage">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li v-for="page in totalPages" :key="page" class="page-item" :class="{ active: currentPage === page }">
+                    <a class="page-link" href="#" @click.prevent="goToPage(page)">{{ page }}</a>
+                </li>
+                <li class="page-item" :class="{ disabled: currentPage === totalPages }">
+                    <a class="page-link" href="#" aria-label="Next" @click.prevent="nextPage">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
     </div>
     <footer class="footer mt-5">
         <div class="container">
@@ -296,40 +238,62 @@
 
     </footer>
     <script>
-        document.getElementById('gridViewBtn').addEventListener('click', function () {
-            const productContainer = document.getElementById('productContainer');
-            productContainer.classList.remove('list-view');
-            productContainer.classList.add('row');
-            const items = productContainer.getElementsByClassName('product-item');
-            for (let item of items) {
-                item.classList.add('col-md-3');
-                item.classList.remove('col-md-12');
-                const card = item.querySelector('.card');
-                card.classList.remove('card-horizontal');
-                const detail = card.querySelector('.card-detail');
-                if (detail) {
-                    detail.remove();
+        new Vue({
+            el: '#app',
+            data: {
+                view: 'grid',
+                products: [
+                    { id: 1, img: 'https://yueyue0313.dynv6.net:8008/A001.png', title: '用心爱你', description: '与您相守，直到天荒地老；99枝：33枝粉玫瑰 + 66枝卡罗拉红玫瑰', price: '¥659', link: '/goods/goodinfo' },
+                    { id: 2, img: 'https://yueyue0313.dynv6.net:8008/A002.png', title: 'Armor Okwahn II', description: '与您相守，直到天荒地老；99枝：33枝粉玫瑰 + 66枝卡罗拉红玫瑰', price: '¥90.00', link: '#' },
+                    { id: 3, img: 'https://yueyue0313.dynv6.net:8008/A003.png', title: 'Armor Air Wildwood ACG', description: '与您相守，直到天荒地老；99枝：33枝粉玫瑰 + 66枝卡罗拉红玫瑰', price: '¥75.00', link: '#' },
+                    { id: 4, img: 'https://yueyue0313.dynv6.net:8008/A004.png', title: 'Armor ACG React Terra', description: '与您相守，直到天荒地老；99枝：33枝粉玫瑰 + 66枝卡罗拉红玫瑰', price: '¥110.00', link: '#' },
+                    { id: 5, img: 'https://yueyue0313.dynv6.net:8008/A005.png', title: '用心爱你', description: '与您相守，直到天荒地老；99枝：33枝粉玫瑰 + 66枝卡罗拉红玫瑰', price: '¥659', link: '#' },
+                    { id: 6, img: 'https://yueyue0313.dynv6.net:8008/B001.png', title: 'Armor Okwahn II', description: '与您相守，直到天荒地老；99枝：33枝粉玫瑰 + 66枝卡罗拉红玫瑰', price: '¥90.00', link: '#' },
+                    { id: 7, img: 'https://yueyue0313.dynv6.net:8008/B002.png', title: 'Armor Air Wildwood ACG', description: '与您相守，直到天荒地老；99枝：33枝粉玫瑰 + 66枝卡罗拉红玫瑰', price: '¥75.00', link: '#' },
+                    { id: 8, img: 'https://yueyue0313.dynv6.net:8008/B003.png', title: 'Armor ACG React Terra', description: '与您相守，直到天荒地老；99枝：33枝粉玫瑰 + 66枝卡罗拉红玫瑰', price: '¥110.00', link: '#' },
+                    { id: 9, img: 'https://yueyue0313.dynv6.net:8008/B004.png', title: '用心爱你', description: '与您相守，直到天荒地老；99枝：33枝粉玫瑰 + 66枝卡罗拉红玫瑰', price: '¥659', link: '#' },
+                    { id: 10, img: 'https://yueyue0313.dynv6.net:8008/B005.png', title: 'Armor Okwahn II', description: '与您相守，直到天荒地老；99枝：33枝粉玫瑰 + 66枝卡罗拉红玫瑰', price: '¥90.00', link: '#' }
+                ],
+                currentPage: 1,
+                itemsPerPage: 8
+            },
+            computed: {
+                totalPages() {
+                    return Math.ceil(this.products.length / this.itemsPerPage);
+                },
+                paginatedProducts() {
+                    const start = (this.currentPage - 1) * this.itemsPerPage;
+                    const end = start + this.itemsPerPage;
+                    return this.products.slice(start, end);
+                },
+                paginatedProductsInRows() {
+                    const rows = [];
+                    for (let i = 0; i < this.paginatedProducts.length; i += 2) {
+                        rows.push(this.paginatedProducts.slice(i, i + 2));
+                    }
+                    return rows;
                 }
-                const button = card.querySelector('.btn');
-                button.classList.remove('btn-sm');
-            }
-        });
-
-        document.getElementById('listViewBtn').addEventListener('click', function () {
-            const productContainer = document.getElementById('productContainer');
-            productContainer.classList.remove('row');
-            productContainer.classList.add('list-view');
-            const items = productContainer.getElementsByClassName('product-item');
-            for (let item of items) {
-                item.classList.remove('col-md-3');
-                item.classList.add('col-md-12');
-                const card = item.querySelector('.card');
-                card.classList.add('card-horizontal');
-                const detail = document.createElement('p');
-                detail.classList.add('card-detail');
-                card.querySelector('.card-body').appendChild(detail);
-                const button = card.querySelector('.btn');
-                button.classList.add('btn-sm');
+            },
+            methods: {
+                goToPage(page) {
+                    this.currentPage = page;
+                },
+                prevPage() {
+                    if (this.currentPage > 1) {
+                        this.currentPage--;
+                    }
+                },
+                nextPage() {
+                    if (this.currentPage < this.totalPages) {
+                        this.currentPage++;
+                    }
+                },
+                switchToGridView() {
+                    this.view = 'grid';
+                },
+                switchToListView() {
+                    this.view = 'list';
+                }
             }
         });
     </script>

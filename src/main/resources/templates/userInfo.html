@@ -9,7 +9,7 @@
     <link rel="stylesheet" th:href="@{/node_modules/bootstrap/dist/css/bootstrap.min.css}">
     <link rel="stylesheet" th:href="@{/bootstrap-icons-1.7/bootstrap-icons.css}">
     <link rel="stylesheet" th:href="@{/css/carts.css}">
-    <link rel="stylesheet" th:href="@{/css/myStyle.css}">
+    <!--    <link rel="stylesheet" th:href="@{/css/myStyle.css}">-->
     <script type="text/javascript" th:src="@{/node_modules/bootstrap/dist/js/bootstrap.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/jquery-3.4.1.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
@@ -19,16 +19,42 @@
     <style>
         .profile-avatar img {
             border-radius: 50%;
-            width: 150px; /* 可以根据需要调整大小 */
-            height: 150px; /* 可以根据需要调整大小 */
+            width: 150px;
+            /* 可以根据需要调整大小 */
+            height: 150px;
+            /* 可以根据需要调整大小 */
             object-fit: cover;
+        }
+        .footer {
+            padding: 20px 0;
+            background-color: white;
+            border-top: 1px solid #e7e7e7;
+            width: 100%;
+            justify-content: center; /* 水平居中 */
+            align-items: center;    /* 垂直居中 */
+            text-align: center;     /* 文本内容居中，如果需要 */
+        }
+        .footer-links a {
+            padding: 20px;
+            color: #000;
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-info,
+        .footer-qrcode,
+        .footer-contact {
+            margin-top: 10px;
         }
     </style>
 </head>
 
 <body>
     <header>
-        <div class="bg-danger">
+        <div class="bg-primary">
             <div class="container">
                 <nav class="navbar navbar-expand-lg navbar-light">
                     <a class="navbar-brand" href="/index">花韵坊</a>
@@ -50,9 +76,9 @@
                         <div class="input-group">
                             <input type="text" class="form-control" placeholder="输入搜索内容" aria-label="搜索"
                                 aria-describedby="basic-addon2">
-                            <button class="btn btn-dark" type="button" id="basic-addon2"><i
-                                    class="bi bi-search"></i></button>
                         </div>
+                        <button class="btn btn-dark" type="button" id="basic-addon2"><i
+                                class="bi bi-search"></i></button>
                     </form>
                     <div class="navbar-icons d-flex align-items-center">
                         <div class="nav-item d-inline-flex">
@@ -71,9 +97,12 @@
     </header>
     <div id="app">
         <div class="container">
-            <div class="d-flex justify-content-between align-items-center py-3">
-                <h1>个人中心</h1>
-                <button class="btn btn-primary" @click="showModal = true">信息修改</button>
+            <div class="d-flex">
+                <h1 class="flex-fill mt-3">个人中心</h1>
+                <div class="d-flex flex-fill flex-row-reverse py-3 ">
+                    <button type="button" class="btn btn-warning mx-3"  @click="quit">退出登录</button>
+                    <button class="btn btn-primary mx-3" @click="showModal = true">信息修改</button>
+                </div>
             </div>
             <div class="card mb-3">
                 <div class="card-body">
@@ -112,112 +141,136 @@
                     <div class="mt-3">
                         <div v-if="currentTab === 'allOrders'" v-for="order in orders" :key="order.id"
                             class="order-list border-bottom pb-2 mb-2">
-                            <p>订单: {{ order.id }} <span :class="order.statusClass">{{ order.status }}</span></p>
+                            <p>订单: {{ order.id }} <span>{{ order.orderStatus }}</span></p>
                             <p>下单时间: {{ order.orderTime }}</p>
+                            <p>价格: {{ order.orderPrice }}</p>
                             <a href="#" class="btn btn-link">查看订单详情</a>
                         </div>
                         <div v-if="currentTab === 'pendingPayment'" v-for="order in filteredOrders('未支付')"
                             :key="order.id" class="order-list border-bottom pb-2 mb-2">
-                            <p>订单: {{ order.id }} <span :class="order.statusClass">{{ order.status }}</span></p>
+                            <p>订单: {{ order.id }} <span>{{ order.orderStatus }}</span></p>
                             <p>下单时间: {{ order.orderTime }}</p>
+                            <p>价格: {{ order.orderPrice }}</p>
                             <a href="#" class="btn btn-link">查看订单详情</a>
                         </div>
                         <div v-if="currentTab === 'pendingShipment'" v-for="order in filteredOrders('已支付')"
                             :key="order.id" class="order-list border-bottom pb-2 mb-2">
-                            <p>订单: {{ order.id }} <span :class="order.statusClass">{{ order.status }}</span></p>
+                            <p>订单: {{ order.id }} <span>{{ order.orderStatus }}</span></p>
                             <p>下单时间: {{ order.orderTime }}</p>
+                            <p>价格: {{ order.orderPrice }}</p>
                             <a href="#" class="btn btn-link">查看订单详情</a>
                         </div>
                         <div v-if="currentTab === 'pendingReceipt'" v-for="order in filteredOrders('运输中')"
                             :key="order.id" class="order-list border-bottom pb-2 mb-2">
-                            <p>订单: {{ order.id }} <span :class="order.statusClass">{{ order.status }}</span></p>
+                            <p>订单: {{ order.id }} <span>{{ order.orderStatus }}</span></p>
                             <p>下单时间: {{ order.orderTime }}</p>
+                            <p>价格: {{ order.orderPrice }}</p>
                             <a href="#" class="btn btn-link">查看订单详情</a>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="modal fade" tabindex="-1" role="dialog" :class="{show: showModal}" style="display: block;"
-            v-if="showModal">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">信息修改</h5>
-                        <button type="button" class="btn-close" @click="showModal = false" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <ul class="nav nav-tabs">
-                            <li class="nav-item" @click="modalTab = 'changePassword'">
-                                <a :class="{'nav-link': true, active: modalTab === 'changePassword'}" href="#">密码修改</a>
-                            </li>
-                            <li class="nav-item" @click="modalTab = 'changeAvatar'">
-                                <a :class="{'nav-link': true, active: modalTab === 'changeAvatar'}" href="#">修改头像</a>
-                            </li>
-                            <li class="nav-item" @click="modalTab = 'addressManagement'">
-                                <a :class="{'nav-link': true, active: modalTab === 'addressManagement'}"
-                                    href="#">地址管理</a>
-                            </li>
-                        </ul>
-                        <div class="mt-3">
-                            <div v-if="modalTab === 'changePassword'">
-                                <form class="form-inline">
-                                    <div class="form-group">
-                                        <label for="currentPassword">当前密码</label>
-                                        <input type="password" class="form-control" id="currentPassword"
-                                            placeholder="输入当前密码">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="newPassword">新密码</label>
-                                        <input type="password" class="form-control" id="newPassword"
-                                            placeholder="输入新密码">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="confirmPassword">确认新密码</label>
-                                        <input type="password" class="form-control" id="confirmPassword"
-                                            placeholder="确认新密码">
-                                    </div>
-                                    <button type="submit" class="btn btn-outline-primary mt-4">保存</button>
-                                </form>
-                            </div>
-                            <div v-if="modalTab === 'changeAvatar'">
-                                <input type="file" @change="onFileChange">
-                                <button class="btn btn-primary" @click="uploadAvatar">上传头像</button>
-                            </div>
-                            <div v-if="modalTab === 'addressManagement'">
-                                <p>地址管理功能尚未实现。</p>
+            <div class="modal fade" tabindex="-1" role="dialog" :class="{show: showModal}" style="display: block;"
+                v-if="showModal">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">信息修改</h5>
+                            <button type="button" class="btn-close" @click="showModal = false"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <ul class="nav nav-tabs">
+                                <li class="nav-item" @click="modalTab = 'changePassword'">
+                                    <a :class="{'nav-link': true, active: modalTab === 'changePassword'}"
+                                        href="#">密码修改</a>
+                                </li>
+                                <li class="nav-item" @click="modalTab = 'changeAvatar'">
+                                    <a :class="{'nav-link': true, active: modalTab === 'changeAvatar'}"
+                                        href="#">修改头像</a>
+                                </li>
+                                <li class="nav-item" @click="modalTab = 'addressManagement'">
+                                    <a :class="{'nav-link': true, active: modalTab === 'addressManagement'}"
+                                        href="#">地址管理</a>
+                                </li>
+                            </ul>
+                            <div class="mt-3">
+                                <div v-if="modalTab === 'changePassword'">
+                                    <form class="form-inline">
+                                        <div class="input-group mb-3" v-show="!isPasswordConfirmed">
+                                            <input type="password" class="form-control" v-model="oldPassword"
+                                                placeholder="请输入原密码" aria-label="Recipient's username"
+                                                aria-describedby="button-addon2">
+                                            <button class="btn btn-primary border-0" type="button" id="button-addon2"
+                                                @click="confirm">确认</button>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="newPassword">新密码</label>
+                                            <input type="password" class="form-control" id="newPassword"
+                                                placeholder="输入新密码" v-model="newPassword"
+                                                :disabled="!isPasswordConfirmed">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="confirmPassword">确认新密码</label>
+                                            <input type="password" class="form-control" id="confirmPassword"
+                                                placeholder="确认新密码" v-model="confirmPassword"
+                                                :disabled="!isPasswordConfirmed">
+                                        </div>
+
+                                        <button type="submit" class="btn btn-outline-primary mt-4"
+                                            @click="saveNewPassword" :disabled="!isPasswordConfirmed">保存</button>
+                                    </form>
+                                </div>
+                                <div v-if="modalTab === 'changeAvatar'">
+                                    <input type="file" @change="onFileChange">
+                                    <button class="btn btn-primary" @click="uploadAvatar">上传头像</button>
+                                </div>
+                                <div v-if="modalTab === 'addressManagement'">
+                                    <p>地址管理功能尚未实现。</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="modal-backdrop fade show" v-if="showModal"></div>
         </div>
-        <div class="modal-backdrop fade show" v-if="showModal"></div>
-    </div>
 
-    <footer class="footer mt-5">
-        <div class="container">
-            <div class="row">
-                <div class="footer-links">
-                    <a href="#">关于我们</a>
-                    <a href="#">联系我们</a>
-                    <a href="#">花语大全</a>
-                    <a href="#">购物指南</a>
+        <footer class="footer mt-5">
+            <div class="container">
+                <div class="row">
+                    <div class="footer-links">
+                        <a href="#">关于我们</a>
+                        <a href="#">联系我们</a>
+                        <a href="#">花语大全</a>
+                        <a href="#">购物指南</a>
+                    </div>
                 </div>
             </div>
-        </div>
-        <br>
-    </footer>
+            <br>
+        </footer>
+    </div>
     <script>
         new Vue({
             el: '#app',
             data: {
-                profile: {},
+                profile: {
+                    userName: '',
+                    userPassword: '',
+                    userPhone: '',
+                    userImage: ''
+                },
                 currentTab: 'allOrders',
                 orders: [],
                 showModal: false, // 确保showModal已经定义
                 modalTab: 'changePassword', // 确保modalTab已经定义
-                selectedFile: null // 确保selectedFile已经定义
+                selectedFile: null, // 确保selectedFile已经定义
+                oldPassword: '',          // 添加oldPassword
+                newPassword: '',          // 添加newPassword
+                confirmPassword: '',      // 添加confirmPassword
+                isPasswordConfirmed: false  // 添加isPasswordConfirmed
             },
             mounted() {
                 // 假设用户名保存在sessionStorage中
@@ -229,21 +282,65 @@
                     })
                         .then(response => {
                             this.profile = response.data.data;
-
                         })
                         .catch(error => {
                             console.error('Error fetching user profile:', error);
                         });
-                    // axios.post('/order/getUserOrders', { username: username })
-                    //     .then(response => {
-                    //         this.orders = response.data;
-                    //     })
-                    //     .catch(error => {
-                    //         console.error('Error fetching orders:', error);
-                    //     });
+                    axios.post('/order/orderList', {
+                        userName: username
+                    })
+                        .then(response => {
+                            this.orders = response.data;
+                            console.log(this.orders)
+                        })
+                        .catch(error => {
+                            console.error('Error fetching orders:', error);
+                        });
                 }
             },
             methods: {
+                quit() {
+                    sessionStorage.removeItem('username');
+                    deleteCookie('username');
+                    window.location.href = '/user/login'
+                },
+                confirm() {
+                    const username = sessionStorage.getItem('username'); // 获取用户名
+                    axios.post('/user/selectUserName', {
+                        userName: username,
+                        userPassword: this.oldPassword
+                    }).then(response => {
+                        console.log(response.data)
+                        if (response.data === 2) {
+                            this.isPasswordConfirmed = true;
+                        } else {
+                            alert('原密码错误');
+                        }
+                    }).catch(error => {
+                        console.error('Error confirming password:', error);
+                        alert('确认密码时发生错误');
+                    });
+                },
+                saveNewPassword() {
+                    const username = sessionStorage.getItem('username'); // 获取用户名
+                    axios.post('/user/updateUserPassword', {
+                        userName: username,
+                        userPassword: this.newPassword
+                    }).then(response => {
+                        if (response.data === 1) {
+                            alert('密码更新成功');
+                            this.isPasswordConfirmed = false;
+                            this.oldPassword = '';
+                            this.newPassword = '';
+                            this.confirmPassword = '';
+                        } else {
+                            alert('密码更新失败');
+                        }
+                    }).catch(error => {
+                        console.error('Error updating password:', error);
+                        alert('更新密码时发生错误');
+                    });
+                },
                 onFileChange(event) {
                     this.selectedFile = event.target.files[0]; // 获取选中的文件
                 },
@@ -258,9 +355,13 @@
                             }
                         })
                             .then(response => {
-                                alert('头像上传成功');
-                                // 更新头像URL
-                                this.profile.avatar = response.data.avatarUrl;
+                                if (this.profile.userImage) {
+                                    alert('头像上传成功');
+                                    // 更新头像URL
+                                    this.profile.userImage = response.data.avatarUrl;
+                                } else {
+                                    alert("头像上传失败")
+                                }
                             })
                             .catch(error => {
                                 console.error('Error uploading avatar:', error);
@@ -271,7 +372,13 @@
                     }
                 },
                 filteredOrders(status) {
-                    return this.orders.filter(order => order.status === status);
+                    const filtered = [];
+                    for (let i = 0; i < this.orders.length; i++) {
+                        if (this.orders[i].orderStatus === status) {
+                            filtered.push(this.orders[i]);
+                        }
+                    }
+                    return filtered;
                 }
             }
         });

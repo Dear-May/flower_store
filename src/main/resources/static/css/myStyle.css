@@ -67,9 +67,6 @@ color: white;
  height: 2px; /* 线条的高度 */
  background-color: white; /* 线条的颜色 */
 }
-.input-group {
-max-width: 300px;
-}
 
 
 
@@ -145,27 +142,59 @@ text-decoration: underline;
 margin-top: 10px;
 }
 /*---------------------*/
-.input-group .form-control {
+.input-group-diy .form-control {
+    display: flex;
+    flex-direction: row;
     border: none; /* 移除所有边框 */
     border-bottom: 1px solid white; /* 添加底部白色线条 */
-    background: transparent; /* 如果需要，可以设置背景为透明 */
+    background-color: rgba(204, 201, 201, 0.29);
+
+
     color: white;
 }
-.input-group .form-control::placeholder {
+.input-group-diy .form-control ::placeholder {
     color: white; /* 设置placeholder文字颜色为白色 */
     opacity: 1; /* 确保placeholder文字不透明 */
 }
-.input-group .form-control:focus {
+.input-group-diy .form-control :focus {
     outline: none; /* 移除聚焦时的轮廓 */
     box-shadow: none; /* 移除聚焦时的阴影 */
     border-bottom-width: 2px; /* 线条变粗 */
     transition: width 0.5s ease;
 }
-
-.input-group .btn {
+.input-group-diy :hover {
     background-color: transparent;
+}
 
+.input-group-diy {
+max-width: 300px;
 }
-.input-group .btn:hover {
-    background-color: rgba(204, 201, 201, 0.29);
+.btn-diy{
+    background-color:transparent;
+    border-style:none;
+    color: white;
 }
+
+
+/*.input-group {*/
+/*max-width: 300px;*/
+/*}*/
+
+/*.input-group .form-control::placeholder {*/
+/*    color: white; !* 设置placeholder文字颜色为白色 *!*/
+/*    opacity: 1; !* 确保placeholder文字不透明 *!*/
+/*}*/
+/*.input-group .form-control:focus {*/
+/*    outline: none; !* 移除聚焦时的轮廓 *!*/
+/*    box-shadow: none; !* 移除聚焦时的阴影 *!*/
+/*    border-bottom-width: 2px; !* 线条变粗 *!*/
+/*    transition: width 0.5s ease;*/
+/*}*/
+
+/*.input-group .btn {*/
+/*    background-color: transparent;*/
+
+/*}*/
+/*.input-group .btn:hover {*/
+/*    background-color: rgba(204, 201, 201, 0.29);*/
+/*}*/
