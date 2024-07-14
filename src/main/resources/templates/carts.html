@@ -59,6 +59,25 @@
         .input-group .form-control::placeholder {
             color: black;
         }
+        .footer {
+            padding: 20px 0;
+            background-color: white;
+            border-top: 1px solid #e7e7e7;
+            width: 100%;
+            justify-content: center; /* 水平居中 */
+            align-items: center;    /* 垂直居中 */
+            text-align: center;     /* 文本内容居中，如果需要 */
+        }
+        .footer-links a {
+            padding: 20px;
+            color: #000;
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
     </style>
 </head>
 
@@ -105,9 +124,9 @@
         </div>
     </header>
     <img th:src="@{/imgs/text.png}">
-    <div class="container mt-3" id="app">
-        <h2>购物车 (全部 {{ cart.length }} 件)</h2>
-        <div class="table-container">
+    <div class="container" id="app">
+        <h2 class="text-center  mb-4">购物车 (全部 {{ cart.length }} 件)</h2>
+        <div class="table-container rounded-3 shadow-lg">
             <table id="car" class="table table-striped rounded">
                 <thead>
                     <tr>
