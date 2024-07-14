@@ -45,7 +45,7 @@ public class ShoppingCartEntity {
 
     @Override
     public String toString() {
-        return "ShoppingCartEntity{" +
+        return "{" +
                 "id='" + id + '\'' +
                 ", user_id='" + user_id + '\'' +
                 ", cart_goodid='" + cart_goodid + '\'' +

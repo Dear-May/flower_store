@@ -36,11 +36,11 @@ public class UserEntity {
 
     @Override
     public String toString() {
-        return "UserEntity{" +
+        return "{" +
                 "userName='" + userName + '\'' +
                 ", userPassword='" + userPassword + '\'' +
                 ", userPhone='" + userPhone + '\'' +
-                ", userImage='" + userImage + '\'' +
+                ", userImage=\"" + userImage + '\"' +
                 '}';
     }
 }

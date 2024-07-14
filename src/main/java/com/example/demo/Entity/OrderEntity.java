@@ -29,7 +29,7 @@ public class OrderEntity {
 
     @Override
     public String toString() {
-        return "OrderEntity{" +
+        return "{" +
                 "id=" + id +
                 ", userId='" + userId +'\''+
                 ", orderTime='" + orderTime + '\'' +

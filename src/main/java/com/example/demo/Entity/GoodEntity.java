@@ -68,7 +68,7 @@ public class GoodEntity {
 
     @Override
     public String toString() {
-        return "GoodEntity{" +
+        return "{" +
                 "id=" + id +
                 ", goods_name='" + goods_name + '\'' +
                 ", goods_describe='" + goods_describe + '\'' +
