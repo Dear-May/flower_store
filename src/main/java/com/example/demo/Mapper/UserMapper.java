@@ -17,6 +17,15 @@ public interface UserMapper {
     })
     public UserEntity selectUserInfo(@Param("userName") String userName);
 
+    @Select("SELECT * FROM user WHERE id = #{userid}")
+    @Results({
+            @Result(property = "userName", column = "user_name"),
+            @Result(property = "userPassword", column = "user_password"),
+            @Result(property = "userImage", column = "user_imgurl"),
+            @Result(property = "userPhone", column = "user_phone"),
+    })
+    public UserEntity selectUserInfoById(int userid);
+
     @Select("select user_name from user where user_name = #{userName}")
     public String selectUserName(String userName);
 

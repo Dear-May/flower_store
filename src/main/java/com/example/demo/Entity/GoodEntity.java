@@ -69,13 +69,13 @@ public class GoodEntity {
     @Override
     public String toString() {
         return "{" +
-                "id=" + id +
-                ", goods_name='" + goods_name + '\'' +
-                ", goods_describe='" + goods_describe + '\'' +
-                ", good_price='" + good_price + '\'' +
-                ", goods_category='" + goods_category + '\'' +
-                ", goods_state='" + goods_state + '\'' +
-                ", goods_imgurl=\"" + goods_imgurl + '\"' +
-                '}';
+                "\"id\": " + id + "," +
+                "\"goods_name\": \"" + goods_name + "\"," +
+                "\"goods_describe\": \"" + goods_describe + "\"," +
+                "\"good_price\": " + good_price + "," + // 假设价格是数值类型，不需要引号
+                "\"goods_category\": \"" + goods_category + "\"," +
+                "\"goods_state\": \"" + goods_state + "\"," +
+                "\"goods_imgurl\": \"" + goods_imgurl + "\"" +
+                "}";
     }
 }
