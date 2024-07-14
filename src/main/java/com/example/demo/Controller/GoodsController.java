@@ -1,7 +1,9 @@
 package com.example.demo.Controller;
 
 import com.example.demo.Entity.GoodEntity;
+import com.example.demo.Mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +21,9 @@ import java.util.Map;
 public class GoodsController {
     @Autowired
     GoodsMapper goodsMapper;
+    @Qualifier("userMapper")
+    @Autowired
+    private UserMapper userMapper;
 
     @RequestMapping("/goodslist")
     public String goodsList() {
@@ -163,12 +168,15 @@ public class GoodsController {
     //将商品添加到购物车
     @ResponseBody
     @RequestMapping(value = "/AddGoodsIntoShoppingCart", method = RequestMethod.POST)
-//添加商品到购物车，如果购物车没有这条记录就insert 有这一条记录就将这条记录的number+1
-    public String AddGoodsIntoShoppingCart(@RequestParam(value = "GoodsId", required = false) int GoodsID, @RequestParam(value = "userId", required = false) int userId) {
+    //添加商品到购物车，如果购物车没有这条记录就insert 有这一条记录就将这条记录的number+1
+    public String AddGoodsIntoShoppingCart(@RequestBody Map<String, Object> map) {
+        String username = (String) map.get("userName");
+        int GoodsID = (int) map.get("GoodsID");
+        int userId = userMapper.selectUserId(username);
         int record = goodsMapper.selectCartRecord(GoodsID, userId);
         System.out.println(record);
-        if (record == 0)//说明需要添加一条记录
-        {
+        if (record == 0) {
+            //说明需要添加一条记录
             if (goodsMapper.insertShopCart(GoodsID, userId)) {
                 return "1";//添加成功
             } else {
@@ -182,7 +190,6 @@ public class GoodsController {
             }
         }
 
-//        return "1";
     }
 }
 
