@@ -10,7 +10,6 @@ public class GoodEntity {
     private String goods_imgurl;
 
 
-
     public int getId() {
         return id;
     }
@@ -76,7 +75,7 @@ public class GoodEntity {
                 ", good_price='" + good_price + '\'' +
                 ", goods_category='" + goods_category + '\'' +
                 ", goods_state='" + goods_state + '\'' +
-                ", goods_imgurl=" + goods_imgurl +
+                ", goods_imgurl=\"" + goods_imgurl + '\"' +
                 '}';
     }
 }

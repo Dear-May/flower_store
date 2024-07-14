@@ -1,28 +1,43 @@
 package com.example.demo.Controller;
 
+import com.example.demo.Entity.GoodEntity;
+import com.example.demo.Mapper.GoodsMapper;
 import com.example.demo.Mapper.UserMapper;
 import com.example.demo.util.UploadImage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.apache.commons.io.FilenameUtils;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 @RequestMapping("/api")
 @Controller
-public class FileController {
+public class ApiController {
 
     @Autowired
     private UploadImage uploadImage;
     @Autowired
     UserMapper userMapper;
+    @Qualifier("goodsMapper")
+    @Autowired
+    private GoodsMapper goodsMapper;
+
+    @RequestMapping(value = "/searchGoods",method = RequestMethod.POST)
+    @ResponseBody
+    public void searchGoods(@RequestBody Map<String, Object> keyword, HttpServletResponse response) throws IOException {
+        String keywordStr = (String) keyword.get("keyword");
+        List<GoodEntity> goods = goodsMapper.selectGoodByName(keywordStr);
+        response.setContentType("text/json;charset=UTF-8");
+        response.getWriter().write(goods.toString());
+    }
 
     @PostMapping("/uploadAvatar")
     @ResponseBody
