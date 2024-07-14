@@ -32,11 +32,11 @@ public class CartController {
         int userId = userMapper.selectUserId(userName);
         List<ShoppingCartEntity> cartList = shoppingCartMapper.getCartList(userId);
         List<Integer> goodsIds = new ArrayList<>();
-        for(ShoppingCartEntity cart:cartList){
+        for (ShoppingCartEntity cart : cartList) {
             goodsIds.add(cart.getCart_goodid());
         }
         List<GoodEntity> goodInfos = new ArrayList<>();
-        for(int id:goodsIds){
+        for (int id : goodsIds) {
             GoodEntity goodentity = goodsMapper.selectGoodInoById(id);
             goodInfos.add(goodentity);
         }
@@ -50,7 +50,7 @@ public class CartController {
 
     private static String getMaps(List<ShoppingCartEntity> cartList, List<GoodEntity> goodInfos) {
         List<Map<String, Object>> cartListMap = new ArrayList<>();
-        for(int i = 0; i< cartList.size(); i++){
+        for (int i = 0; i < cartList.size(); i++) {
             Map<String, Object> cartMap = new HashMap<>();
             cartMap.put("cart_id", cartList.get(i).getId());
             cartMap.put("cart_goodid", cartList.get(i).getCart_goodid());
@@ -85,51 +85,50 @@ public class CartController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/goodsIncreament", method = RequestMethod.POST)//添加商品到购物车，如果购物车没有这条记录就insert 有这一条记录就将这条记录的number+1
-    public String goodsIncreament(@RequestParam(value = "GoodsId", required = false) int GoodsID,@RequestParam(value = "userId", required = false) int userId) {
-        if(shoppingCartMapper.CartGoodIncrement(userId,GoodsID))
-        {
+    @RequestMapping(value = "/goodsIncreament", method = RequestMethod.POST)
+    //添加商品到购物车，如果购物车没有这条记录就insert 有这一条记录就将这条记录的number+1
+    public String goodsIncreament(@RequestBody Map<String, Object> cart) {
+        int cartId = (Integer) cart.get("cart_id");
+
+        if (shoppingCartMapper.CartGoodIncrement(cartId)) {
             return "1";//添加成功
-        }
-        else{
+        } else {
             return "-1";//添加失败
         }
     }
 
     @ResponseBody
-    @RequestMapping(value = "/goodsDecreament", method = RequestMethod.POST)//添加商品到购物车，如果购物车没有这条记录就insert 有这一条记录就将这条记录的number+1
-    public String goodsDecreament(@RequestParam(value = "GoodsId", required = false) int GoodsID,@RequestParam(value = "userId", required = false) int userId) {
-        if(shoppingCartMapper.getgoodnumber(userId,GoodsID)==1)//此时商品余量只剩下0，继续删除的话就会变成-1，因此将数据库的这一条记录删除
-        {
-            if(shoppingCartMapper.CartDelete(userId,GoodsID))
-            {
-                return "1";
+    @RequestMapping(value = "/goodsDecreament", method = RequestMethod.POST)
+    //添加商品到购物车，如果购物车没有这条记录就insert 有这一条记录就将这条记录的number+1
+    public String goodsDecreament(@RequestBody Map<String, Object> cart) {
+        int cartId = (Integer) cart.get("cart_id");
 
-            }
-            else {
+        if (shoppingCartMapper.getgoodnumber(cartId) == 1) {
+            //此时商品余量只剩下0，继续删除的话就会变成-1，因此将数据库的这一条记录删除
+            if (shoppingCartMapper.CartDelete(cartId)) {
+                return "1";
+            } else {
                 return "-1";
             }
         }
-        if(shoppingCartMapper.CartGoodDecrement(userId,GoodsID))
-        {
-            return "1";//减少成功
-        }
-        else{
-            return "-1";//减少失败
+        if (shoppingCartMapper.CartGoodDecrement(cartId)) {
+            return "1";
+        } else {
+            return "-1";
         }
     }
 
     @ResponseBody
-    @RequestMapping(value = "/goodsRemove", method = RequestMethod.POST)//添加商品到购物车，如果购物车没有这条记录就insert 有这一条记录就将这条记录的number+1
-    public String goodsRemove(@RequestParam(value = "GoodsId", required = false) int GoodsID,@RequestParam(value = "userId", required = false) int userId) {
-        if(shoppingCartMapper.CartDelete(userId,GoodsID))
-            {
-                return "1";
-
-            }
-            else {
-                return "-1";
-            }
+    @RequestMapping(value = "/goodsRemove", method = RequestMethod.POST)
+//添加商品到购物车，如果购物车没有这条记录就insert 有这一条记录就将这条记录的number+1
+    public String goodsRemove(@RequestBody Map<String, Object> cart) {
+        int cartId = (Integer) cart.get("cart_id");
+        if (shoppingCartMapper.CartDelete(cartId)) {
+            return "1";
+        } else {
+            return "-1";
         }
+    }
+
 
 }

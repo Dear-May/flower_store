@@ -1,15 +1,15 @@
 package com.example.demo.Entity;
 
 public class OrderInfoEntity {
-    private int order_id;
+    private String order_id;
     private int order_goodId;
     private int order_goodnum;
 
-    public int getOrder_id() {
+    public String getOrder_id() {
         return order_id;
     }
 
-    public void setOrder_id(int order_id) {
+    public void setOrder_id(String order_id) {
         this.order_id = order_id;
     }
 

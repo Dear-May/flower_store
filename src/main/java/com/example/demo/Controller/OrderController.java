@@ -3,6 +3,7 @@ package com.example.demo.Controller;
 import com.example.demo.Entity.*;
 import com.example.demo.Mapper.GoodsMapper;
 import com.example.demo.Mapper.OrderMapper;
+import com.example.demo.Mapper.ShoppingCartMapper;
 import com.example.demo.Mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/order")
@@ -26,8 +27,10 @@ public class OrderController {
     UserMapper userMapper;
     @Autowired
     GoodsMapper goodsMapper;
+    @Autowired
+    ShoppingCartMapper shoppingCartMapper;
 
-    @RequestMapping(value="/orderList", method = RequestMethod.POST)
+    @RequestMapping(value = "/orderList", method = RequestMethod.POST)
     public void orderList(@RequestBody Map<String, Object> userInfo, HttpServletResponse response) throws IOException {
         String userName = (String) userInfo.get("userName");
         int userID = userMapper.selectUserId(userName);
@@ -37,9 +40,9 @@ public class OrderController {
         response.getWriter().write(orderList.toString());
     }
 
-    @RequestMapping(value="/showOrder", method = RequestMethod.POST)
+    @RequestMapping(value = "/showOrder", method = RequestMethod.POST)
     public void showOrder(@RequestBody Map<String, Object> Order, HttpServletResponse response) throws IOException {
-        int orderId = (int) Order.get("orderId");
+        String orderId = (String) Order.get("orderId");
         OrderEntity order = orderMapper.selectByOrderId(orderId);
         UserEntity user = userMapper.selectUserInfoById(order.getUserId());
         List<OrderInfoEntity> goodsIds = orderMapper.selectGoodsByOrderId(orderId);
@@ -48,7 +51,7 @@ public class OrderController {
             GoodEntity good = goodsMapper.selectGoodInoById(goodsId.getOrder_goodId());
             goodsList.add(good);
         }
-        String OrderMap = getMapsAsJson(order, user, goodsList,goodsIds);
+        String OrderMap = getMapsAsJson(order, user, goodsList, goodsIds);
 
         response.setContentType("text/json;charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
@@ -90,4 +93,46 @@ public class OrderController {
         return jsonBuilder.toString();
     }
 
+    @RequestMapping(value = "/addOrder", method = RequestMethod.POST)
+    public void addOrder(@RequestBody Map<String, Object> Order, HttpServletResponse response) throws IOException {
+        boolean isSuccess = false;
+        String userName = (String) Order.get("userName");
+        List<Integer> cartsid = (List<Integer>) Order.get("cartsid");
+        int total_price = (int) Order.get("total_price");
+        int userId = userMapper.selectUserId(userName);
+        List<Integer> goodsNum = new ArrayList<>();
+        List<Integer> goodsIds = new ArrayList<>();
+        for (int cartId : cartsid) {
+            goodsNum.add(shoppingCartMapper.getgoodnumber(cartId));
+            goodsIds.add(shoppingCartMapper.getgoodid(cartId));
+        }
+        //生成18位订单号 UUID
+        String orderId = UUID.randomUUID().toString().replace("-", "");
+        orderId = orderId.substring(0, 18);
+        if (!orderMapper.insertOrder(orderId, userId, "已支付", total_price)) {
+            response.setContentType("text/json;charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write("-1");
+            return;
+        }
+        for (int i = 0; i < goodsNum.size(); i++) {
+            if (!orderMapper.insertOrderGood(orderId, goodsIds.get(i), goodsNum.get(i))) {
+                response.setContentType("text/json;charset=UTF-8");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write("-1");
+                return;
+            }
+        }
+        for (int cartId : cartsid) {
+            if (!shoppingCartMapper.ChangeCartStatus(cartId, orderId)) {
+                response.setContentType("text/json;charset=UTF-8");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write("-1");
+                return;
+            }
+        }
+        response.setContentType("text/json;charset=UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write("1");
+    }
 }

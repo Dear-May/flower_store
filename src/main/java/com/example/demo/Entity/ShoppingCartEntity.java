@@ -5,7 +5,7 @@ public class ShoppingCartEntity {
     private int user_id;
     private int cart_goodid;
     private int cart_goodnum;
-    private int order_id;
+    private String order_id;
 
     public int getId() {
         return id;
@@ -31,15 +31,19 @@ public class ShoppingCartEntity {
         this.cart_goodid = cart_goodid;
     }
 
-    public int getCart_goodnum() { return cart_goodnum; }
+    public int getCart_goodnum() {
+        return cart_goodnum;
+    }
 
-    public void setCart_goodnum(int cart_goodnum) { this.cart_goodnum = cart_goodnum; }
+    public void setCart_goodnum(int cart_goodnum) {
+        this.cart_goodnum = cart_goodnum;
+    }
 
-    public int getOrder_id() {
+    public String getOrder_id() {
         return order_id;
     }
 
-    public void setOrder_id(int order_id) {
+    public void setOrder_id(String order_id) {
         this.order_id = order_id;
     }
 
