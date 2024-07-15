@@ -12,7 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,13 +29,15 @@ public class GoodsController {
         return "shop";
     }
 
-
     @RequestMapping("/goodinfo")
-    public String goodsDetail(@RequestParam(value = "GoodsId", required = false) int GoodsID, Model model) {
-        System.out.println(GoodsID);
-        model.addAttribute("Goods", goodsMapper.selectGoodInoById(GoodsID));
-        return "goodinfo";
-    }//返回GoodInfo页面 并传递一个当前商品的id，页面在加载的时候通过这个id到数据库搜索全部的商品信息
+    public String getGoodDetails(@RequestParam("GoodsId") int GoodsId, Model model) {
+        // 从服务层获取商品信息
+        GoodEntity Goods = goodsMapper.selectGoodInoById(GoodsId);
+        // 将商品信息添加到模型中
+        model.addAttribute("Goods", Goods);
+        // 返回视图名称
+        return "goodInfo";
+    }
 
     @ResponseBody
     @RequestMapping(value = "/deleteGood", method = RequestMethod.POST)//下架商品
