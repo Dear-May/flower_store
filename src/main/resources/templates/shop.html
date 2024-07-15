@@ -173,7 +173,7 @@
                         <div class="card my-4">
                             <img :src="product.goods_imgurl" class="card-img-top img-fluid" alt="...">
                             <div class="card-body">
-                                <a :href="'/goods/' + product.id">
+                                <a :href="'/goods/goodinfo/?GoodsId=' + product.id">
                                     <h5 class="card-title mt-2">{{ product.goods_name }}</h5>
                                 </a>
                                 <p class="card-text">{{ product.goods_describe }}</p>
