@@ -46,7 +46,7 @@ public interface GoodsMapper {
     @Select("select * from goods where goods_name like CONCAT('%', #{goods_name}, '%')")
     public List<GoodEntity> selectGoodByName(@Param("goods_name") String goods_name);
 
-    @Select("SELECT count(*) from shopping_cart where user_id=#{userId} and cart_goodid=#{GoodsID}")
+    @Select("SELECT count(*) from shopping_cart where user_id=#{userId} and cart_goodid=#{GoodsID} and order_id is null")
     public int selectCartRecord(@Param("userId") int userId, @Param("GoodsID") int GoodsID);//查询当前用户是否已经将这个商品加入购物车
 
     @Insert("insert into shopping_cart (user_id,cart_goodid) values(#{userId},#{GoodsID})")

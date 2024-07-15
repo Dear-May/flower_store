@@ -26,7 +26,9 @@ public class UserController {
     }
 
     @RequestMapping("/userInfo")
-    public String userInfo() { return "userInfo";}
+    public String userInfo() {
+        return "userInfo";
+    }
 
     @PostMapping("/showUserInfo")
     public void showUserInfo(@RequestBody Map<String, Object> userInfo, HttpServletResponse response) throws IOException {
@@ -66,8 +68,7 @@ public class UserController {
     public String selectUserName(@RequestBody UserEntity user) {
         String userName = user.getUserName();
         String userPassword = user.getUserPassword();
-        if(userName.isEmpty() || userPassword.isEmpty())
-        {
+        if (userName.isEmpty() || userPassword.isEmpty()) {
             return "-1";
         }
         System.out.println(userName + userPassword);
@@ -100,11 +101,13 @@ public class UserController {
     public String addUser(@RequestBody UserEntity user) {
         String userName = user.getUserName();
         String userPassword = user.getUserPassword();
-        try
-        {
+        if (userName.isEmpty() || userPassword.isEmpty()) {
+            return "-1";
+        }
+        try {
             String selectRes = userMapper.selectUserName(user.getUserName());
             System.out.println(selectRes);
-            if(selectRes!=null)//说明数据库有重复的用户名了
+            if (selectRes != null)//说明数据库有重复的用户名了
             {
                 return "2";
             }
@@ -112,11 +115,9 @@ public class UserController {
             String passwordMD5 = passwordMD5(userName, userPassword);
             userMapper.addUser(userName, passwordMD5);
             return "1";
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             return "-1";
         }
-
     }
 
     @ResponseBody
@@ -124,18 +125,17 @@ public class UserController {
     public String updateUserPassword(@RequestBody UserEntity user) {
         String userName = user.getUserName();
         String userPassword = user.getUserPassword();
-        System.out.println(userName + "****" +userPassword);
-        if (userPassword==null){
+        System.out.println(userName + "****" + userPassword);
+        if (userPassword == null) {
             return "密码为空";
         }
-        try
-        {
+        try {
             String passwordMD5 = passwordMD5(userName, userPassword);
-            if(userMapper.updateUserPassword(userName, passwordMD5)){
+            if (userMapper.updateUserPassword(userName, passwordMD5)) {
                 return "1";
             }
             return "-1";
-        }catch (Exception e) {
+        } catch (Exception e) {
             return "-1";
         }
     }
