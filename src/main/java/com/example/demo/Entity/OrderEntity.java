@@ -50,7 +50,7 @@ public class OrderEntity {
     @Override
     public String toString() {
         return "{" +
-                "\"id\": " + id + "," +
+                "\"id\": \"" + id + "\"," +
                 "\"userId\": \"" + userId + "\"," +
                 "\"orderTime\": \"" + orderTime + "\"," +
                 "\"orderStatus\": \"" + orderStatus + "\"," +
