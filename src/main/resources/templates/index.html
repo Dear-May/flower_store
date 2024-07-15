@@ -10,8 +10,10 @@
     <link rel="stylesheet" th:href="@{/bootstrap-icons-1.7/bootstrap-icons.css}">
     <link rel="stylesheet" th:href="@{/css/myStyle.css}">
     <script type="text/javascript" th:src="@{/node_modules/bootstrap/dist/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{/node_modules/bootstrap/dist/js/bootstrap.bundle.js}"></script>
     <script type="text/javascript" th:src="@{/js/jquery-3.4.1.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js }"></script>
     <script type="text/javascript" th:src="@{/js/vue.js}"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
@@ -189,7 +191,7 @@
                                             </a>
                                             <p class="card-text">{{ product.goods_describe }}</p>
                                             <p class="text-danger">¥{{ product.good_price }}</p>
-                                            <button class="btn btn-outline-danger">加入购物车</button>
+                                            <button class="btn btn-outline-danger" @click="addToCart(product.id, $event)">加入购物车</button>
                                         </div>
                                     </div>
                                 </div>
@@ -208,7 +210,7 @@
                                             </a>
                                             <p class="card-text">{{ product.goods_describe }}</p>
                                             <p class="text-danger">¥{{ product.good_price }}</p>
-                                            <button class="btn btn-outline-danger">加入购物车</button>
+                                            <button class="btn btn-outline-danger" @click="addToCart(product.id, $event)">加入购物车</button>
                                         </div>
                                     </div>
                                 </div>
@@ -278,6 +280,35 @@
                 filterProducts() {
                     this.bestsellerProducts = this.products.filter(product => product.goods_category === 'recommend').slice(0, 8);
                     this.todayProducts = this.products.filter(product => product.goods_category === 'new').slice(0, 8);
+                },
+                addToCart(productId, event) {
+                    const username = sessionStorage.getItem("username")
+                    axios.post('/goods/AddGoodsIntoShoppingCart', {
+                        userName: username, GoodsID: productId
+                    })
+                        .then(response => {
+                            const result = response.data;
+                            console.log(result)
+                            if (result == "1") {
+                                this.showPopover(event.target, '成功添加购物车');
+                            } else {
+                                this.showPopover(event.target, '添加失败');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error adding to cart:', error);
+                            this.showPopover(event.target, '添加失败');
+                        });
+                },
+                showPopover(target, message) {
+                    const popover = new bootstrap.Popover(target, {
+                        content: message,
+                        placement: 'right'
+                    });
+                    popover.show();
+                    setTimeout(() => {
+                        popover.dispose();
+                    }, 1000);
                 },
                 performSearch() {
                     localStorage.setItem('searchQuery', this.searchQuery);

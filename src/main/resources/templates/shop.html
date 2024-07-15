@@ -10,8 +10,10 @@
     <link rel="stylesheet" th:href="@{/bootstrap-icons-1.7/bootstrap-icons.css}">
     <link rel="stylesheet" th:href="@{/css/myStyle.css}">
     <script type="text/javascript" th:src="@{/node_modules/bootstrap/dist/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{/node_modules/bootstrap/dist/js/bootstrap.bundle.js}"></script>
     <script type="text/javascript" th:src="@{/js/jquery-3.4.1.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js }"></script>
     <script type="text/javascript" th:src="@{/js/vue.js}"></script>
     <script type="text/javascript" th:src="@{/js/public.js}"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -85,8 +87,6 @@
 
 <body>
     <div id="app">
-
-
         <header>
             <div class="header-bg">
                 <div class="container">
@@ -178,7 +178,7 @@
                                 </a>
                                 <p class="card-text">{{ product.goods_describe }}</p>
                                 <p class="card-text">¥{{ product.good_price }}</p>
-                                <a href="#" class="btn btn-outline-danger">加入购物车</a>
+                                <button class="btn btn-outline-danger" @click="addToCart(product.id, $event)">加入购物车</button>
                             </div>
                         </div>
                     </div>
@@ -197,7 +197,7 @@
                                     </a>
                                     <p class="card-text">{{ product.goods_describe }}</p>
                                     <p class="card-text">¥{{ product.good_price }}</p>
-                                    <a href="#" class="btn btn-outline-danger btn-sm">加入购物车</a>
+                                    <button class="btn btn-outline-danger" @click="addToCart(product.id, $event)">加入购物车</button>
                                 </div>
                             </div>
                         </div>
@@ -210,16 +210,16 @@
             <nav aria-label="Page navigation example" v-if="filteredProducts.length">
                 <ul class="pagination justify-content-center">
                     <li class="page-item" :class="{ disabled: currentPage === 1 }">
-                        <a class="page-link" href="#" aria-label="Previous" @click.prevent="prevPage">
+                        <a class="page-link" href="#" aria-label="Previous" @click="prevPage">
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
                     <li v-for="page in totalPages" :key="page" class="page-item"
                         :class="{ active: currentPage === page }">
-                        <a class="page-link" href="#" @click.prevent="goToPage(page)">{{ page }}</a>
+                        <a class="page-link" href="#" @click="goToPage(page)">{{ page }}</a>
                     </li>
                     <li class="page-item" :class="{ disabled: currentPage === totalPages }">
-                        <a class="page-link" href="#" aria-label="Next" @click.prevent="nextPage">
+                        <a class="page-link" href="#" aria-label="Next" @click="nextPage">
                             <span aria-hidden="true">&raquo;</span>
                         </a>
                     </li>
@@ -301,6 +301,35 @@
                             console.error('Error fetching search results:', error);
                             this.products = []; // 如果搜索出错，设置为空
                         });
+                },
+                addToCart(productId, event) {
+                    const username = sessionStorage.getItem("username")
+                    axios.post('/goods/AddGoodsIntoShoppingCart', {
+                        userName: username, GoodsID: productId
+                    })
+                        .then(response => {
+                            const result = response.data;
+                            console.log(result)
+                            if (result == "1") {
+                                this.showPopover(event.target, '成功添加购物车');
+                            } else {
+                                this.showPopover(event.target, '添加失败');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error adding to cart:', error);
+                            this.showPopover(event.target, '添加失败');
+                        });
+                },
+                showPopover(target, message) {
+                    const popover = new bootstrap.Popover(target, {
+                        content: message,
+                        placement: 'right'
+                    });
+                    popover.show();
+                    setTimeout(() => {
+                        popover.dispose();
+                    }, 1000);
                 },
                 sortProducts(event) {
                     this.sortOrder = event.target.value;

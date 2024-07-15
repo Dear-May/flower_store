@@ -49,10 +49,10 @@ public interface GoodsMapper {
     @Select("SELECT count(*) from shopping_cart where user_id=#{userId} and cart_goodid=#{GoodsID}")
     public int selectCartRecord(@Param("userId") int userId, @Param("GoodsID") int GoodsID);//查询当前用户是否已经将这个商品加入购物车
 
-    @Insert("insert into shopping_cart (user_id,cart_goodid) values(#{GoodsID},#{userId})")
-    public boolean insertShopCart(@Param("GoodsID") int GoodsID, @Param("userId") int userId);//给购物车新建一条记录
+    @Insert("insert into shopping_cart (user_id,cart_goodid) values(#{userId},#{GoodsID})")
+    public boolean insertShopCart(@Param("userId") int userId, @Param("GoodsID") int GoodsID);//给购物车新建一条记录
 
-    @Update("update shopping_cart set cart_goodnum=cart_goodnum +1 where user_id=#{userId} and cart_goodid=#{GoodsID}")
+    @Update("update shopping_cart set cart_goodnum=cart_goodnum+1 where user_id=#{userId} and cart_goodid=#{GoodsID}")
     public boolean CartGoodIncrement(@Param("userId") int userId, @Param("GoodsID") int GoodsID);
 
 }

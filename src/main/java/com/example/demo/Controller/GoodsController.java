@@ -173,11 +173,12 @@ public class GoodsController {
         String username = (String) map.get("userName");
         int GoodsID = (int) map.get("GoodsID");
         int userId = userMapper.selectUserId(username);
-        int record = goodsMapper.selectCartRecord(GoodsID, userId);
+        int record = goodsMapper.selectCartRecord(userId, GoodsID);
         System.out.println(record);
+
         if (record == 0) {
             //说明需要添加一条记录
-            if (goodsMapper.insertShopCart(GoodsID, userId)) {
+            if (goodsMapper.insertShopCart(userId,GoodsID)) {
                 return "1";//添加成功
             } else {
                 return "-1";//添加失败
