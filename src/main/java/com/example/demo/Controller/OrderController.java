@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static org.springframework.asm.Type.getType;
+
 @Controller
 @RequestMapping("/order")
 public class OrderController {
@@ -95,10 +97,14 @@ public class OrderController {
 
     @RequestMapping(value = "/addOrder", method = RequestMethod.POST)
     public void addOrder(@RequestBody Map<String, Object> Order, HttpServletResponse response) throws IOException {
+
         boolean isSuccess = false;
         String userName = (String) Order.get("userName");
         List<Integer> cartsid = (List<Integer>) Order.get("cartsid");
-        int total_price = (int) Order.get("total_price");
+        double total_price = ((Number) Order.get("total_price")).doubleValue(); // 确保total_price是double类型
+        System.out.println(userName);
+        System.out.println(cartsid);
+        System.out.println(total_price);
         int userId = userMapper.selectUserId(userName);
         List<Integer> goodsNum = new ArrayList<>();
         List<Integer> goodsIds = new ArrayList<>();
@@ -112,14 +118,14 @@ public class OrderController {
         if (!orderMapper.insertOrder(orderId, userId, "已支付", total_price)) {
             response.setContentType("text/json;charset=UTF-8");
             response.setCharacterEncoding("UTF-8");
-            response.getWriter().write("-1");
+            response.getWriter().write("false");
             return;
         }
         for (int i = 0; i < goodsNum.size(); i++) {
             if (!orderMapper.insertOrderGood(orderId, goodsIds.get(i), goodsNum.get(i))) {
                 response.setContentType("text/json;charset=UTF-8");
                 response.setCharacterEncoding("UTF-8");
-                response.getWriter().write("-1");
+                response.getWriter().write("false");
                 return;
             }
         }
@@ -127,12 +133,12 @@ public class OrderController {
             if (!shoppingCartMapper.ChangeCartStatus(cartId, orderId)) {
                 response.setContentType("text/json;charset=UTF-8");
                 response.setCharacterEncoding("UTF-8");
-                response.getWriter().write("-1");
+                response.getWriter().write("false");
                 return;
             }
         }
         response.setContentType("text/json;charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
-        response.getWriter().write("1");
+        response.getWriter().write("success");
     }
 }

@@ -91,9 +91,9 @@ public class CartController {
         int cartId = (Integer) cart.get("cart_id");
 
         if (shoppingCartMapper.CartGoodIncrement(cartId)) {
-            return "1";//添加成功
+            return "success";//添加成功
         } else {
-            return "-1";//添加失败
+            return "false";//添加失败
         }
     }
 
@@ -106,15 +106,15 @@ public class CartController {
         if (shoppingCartMapper.getgoodnumber(cartId) == 1) {
             //此时商品余量只剩下0，继续删除的话就会变成-1，因此将数据库的这一条记录删除
             if (shoppingCartMapper.CartDelete(cartId)) {
-                return "1";
+                return "success";
             } else {
-                return "-1";
+                return "false";
             }
         }
         if (shoppingCartMapper.CartGoodDecrement(cartId)) {
-            return "1";
+            return "success";
         } else {
-            return "-1";
+            return "false";
         }
     }
 
@@ -124,9 +124,9 @@ public class CartController {
     public String goodsRemove(@RequestBody Map<String, Object> cart) {
         int cartId = (Integer) cart.get("cart_id");
         if (shoppingCartMapper.CartDelete(cartId)) {
-            return "1";
+            return "success";
         } else {
-            return "-1";
+            return "false";
         }
     }
 

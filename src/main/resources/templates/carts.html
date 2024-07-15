@@ -14,6 +14,8 @@
     <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/vue.js}"></script>
     <script type="text/javascript" th:src="@{/js/public.js}"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
     <style>
         body {
             font-family: Arial, Helvetica, sans-serif;
@@ -98,7 +100,7 @@
                                 <a class="nav-link fs-5" href="/index">首页</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link fs-5" href="shop.html">全部商品</a>
+                                <a class="nav-link fs-5" href="/goods/goodslist">全部商品</a>
                             </li>
                         </ul>
                     </div>
@@ -124,68 +126,66 @@
             </div>
         </div>
     </header>
-    <img th:src="@{/imgs/text.png}">
-    <div class="container">
-        <h2 class="text-center  mb-4">购物车 (全部 {{ cart.length }} 件)</h2>
+<!--    <img th:src="@{/imgs/text2.png}">-->
+    <div class="container mt-4">
+        <h2 class="text-center mb-4">购物车 (全部 {{ cart.length }} 件)</h2>
         <div class="table-container rounded-3 shadow-lg">
             <table id="car" class="table table-striped rounded">
                 <thead>
-                    <tr>
-                        <th class="check me-2">
-                            <label class="custom-checkbox">
-                                <input type="checkbox" v-model="allSelected" @change="selectAll">
-                                <span class="checkmark"></span>
-                            </label>
-                            全选
-                        </th>
-                        <th>商品图片</th>
-                        <th>商品名称</th>
-                        <th>单价</th>
-                        <th>数量</th>
-                        <th>小计</th>
-                        <th>操作</th>
-                    </tr>
+                <tr>
+                    <th class="check me-2">
+                        <label class="custom-checkbox">
+                            <input type="checkbox" v-model="allSelected" @change="selectAll">
+                            <span class="checkmark"></span>
+                        </label>
+                        全选
+                    </th>
+                    <th>商品图片</th>
+                    <th>商品名称</th>
+                    <th>单价</th>
+                    <th>数量</th>
+                    <th>小计</th>
+                    <th>操作</th>
+                </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(item, index) in cart" :key="index">
-                        <td>
-                            <label class="custom-checkbox">
-                                <input type="checkbox" v-model="item.selected">
-                                <span class="checkmark"></span>
-                            </label>
-                        </td>
-                        <td>
-                            <img :src="item.imgUrl" width="80" height="80" alt="商品图片">
-                        </td>
-                        <td>
-                            <span>{{ item.proName }}</span>
-                        </td>
-                        <td>
-                            <span>{{ item.proPrice }}元</span>
-                        </td>
-                        <td>
-                            <button class="btn btn-sm btn-outline-secondary"
-                                @click="updateQuantity(item, -1)">-</button>
-                            <span class="mx-2">{{ item.quantity }}</span>
-                            <button class="btn btn-sm btn-outline-secondary" @click="updateQuantity(item, 1)">+</button>
-                        </td>
-                        <td>
-                            <span>{{ item.proPrice * item.quantity }}元</span>
-                        </td>
-                        <td>
-                            <button class="btn btn-sm btn-outline-danger" @click="removeItem(index)">×</button>
-                        </td>
-                    </tr>
+                <tr v-for="(item, index) in cart" :key="item.cart_id">
+                    <td>
+                        <label class="custom-checkbox">
+                            <input type="checkbox" v-model="item.selected">
+                            <span class="checkmark"></span>
+                        </label>
+                    </td>
+                    <td>
+                        <img :src="item.cart_goodimage" width="80" height="80" alt="商品图片">
+                    </td>
+                    <td>
+                        <span>{{ item.cart_goodname }}</span>
+                    </td>
+                    <td>
+                        <span>{{ item.cart_goodprice.toFixed(2) }}元</span>
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-secondary" @click="decrementItem(item)">-</button>
+                        <span class="mx-2">{{ item.cart_goodnumber }}</span>
+                        <button class="btn btn-sm btn-outline-secondary" @click="incrementItem(item)">+</button>
+                    </td>
+                    <td>
+                        <span>{{ (item.cart_goodprice * item.cart_goodnumber).toFixed(2) }}元</span>
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-danger" @click="removeItem(item, index)">×</button>
+                    </td>
+                </tr>
                 </tbody>
             </table>
         </div>
         <div id="sum_area" class="d-flex justify-content-between align-items-center mt-4">
             <div id="pay" class="btn btn-outline-danger" @click="openModal">去结算</div>
-            <div id="pay_amout">合计：<span id="price_num">{{ totalAmount }}</span>元</div>
+            <div id="pay_amount">合计：<span id="price_num">{{ totalAmount.toFixed(2) }}</span>元</div>
         </div>
         <!-- 模态框 -->
-        <div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel"
-            aria-hidden="true">
+        <div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -195,14 +195,12 @@
                     <div class="modal-body">
                         <p>勾选的商品：</p>
                         <ul id="selected-items">
-                            <li v-for="item in selectedItems" :key="item.proName">{{ item.proName }} x {{ item.quantity
-                                }} -
-                                {{ item.proPrice * item.quantity }}元</li>
+                            <li v-for="item in selectedItems" :key="item.cart_goodname">{{ item.cart_goodname }} x {{ item.cart_goodnumber }} - {{ (item.cart_goodprice * item.cart_goodnumber).toFixed(2) }}元</li>
                         </ul>
-                        <p>合计：<span id="modal-total-price">{{ totalAmount }}</span>元</p>
+                        <p>合计：<span id="modal-total-price">{{ totalAmount.toFixed(2) }}</span>元</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" id="go-to-pay">去支付</button>
+                        <button type="button" class="btn btn-primary" id="go-to-pay" @click="createOrder">去支付</button>
                     </div>
                 </div>
             </div>
@@ -225,60 +223,143 @@
     
     </footer>
 </div>
-    <script>
-        new Vue({
-            el: '#app',
-            data: {
-                cart: [
-                    { imgUrl: "item-1.jpg", proName: "小米手环4 NFC版", proPrice: 229, quantity: 1, selected: false },
-                    { imgUrl: "img/03-car-02.png", proName: "Redmi AirDots真无线蓝牙耳机", proPrice: 99.9, quantity: 1, selected: false },
-                    { imgUrl: "img/03-car-03.png", proName: "米家蓝牙温湿度计", proPrice: 65, quantity: 1, selected: false }
-                ],
-                allSelected: false,
-                modal: null
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            cart: [],
+            allSelected: false,
+            modal: null,
+            searchQuery: '' // 添加搜索查询的数据绑定
+        },
+        computed: {
+            totalAmount() {
+                return this.cart.reduce((sum, item) => {
+                    return sum + (item.selected ? item.cart_goodprice * item.cart_goodnumber : 0);
+                }, 0);
             },
-            computed: {
-                totalAmount() {
-                    return this.cart.reduce((sum, item) => {
-                        return sum + (item.selected ? item.proPrice * item.quantity : 0);
-                    }, 0);
-                },
-                selectedItems() {
-                    return this.cart.filter(item => item.selected);
-                }
-            },
-            methods: {
-                selectAll() {
-                    this.cart.forEach(item => {
-                        item.selected = this.allSelected;
-                    });
-                },
-                updateQuantity(item, amount) {
-                    if (item.quantity + amount > 0) {
-                        item.quantity += amount;
-                    }
-                },
-                removeItem(index) {
-                    this.cart.splice(index, 1);
-                },
-                openModal() {
-                    this.modal = new bootstrap.Modal(document.getElementById('checkoutModal'));
-                    this.modal.show();
-                },
-                closeModal() {
-                    if (this.modal) {
-                        this.modal.hide();
-                    }
-                },
-                performSearch() {
-                    localStorage.setItem('searchQuery', this.searchQuery);
-                    // console.log(this.searchQuery)
-                    window.location.href = '/goods/goodslist';
-                }
+            selectedItems() {
+                return this.cart.filter(item => item.selected);
             }
-        });
-    </script>
+        },
+        methods: {
+            fetchCart() {
+                const username = sessionStorage.getItem("username")
+                axios.post('/cart/getcartgood', {
+                    userName: username
+                })
+                    .then(response => {
+                        console.log(response.data)
+                        this.cart = response.data.map(item => ({
+                            ...item,
+                            selected: false // 添加selected字段，用于多选
+                        }));                    })
+                    .catch(error => {
+                        console.error('Error fetching cart:', error);
+                    });
+            },
+            selectAll() {
+                this.cart.forEach(item => {
+                    item.selected = this.allSelected;
+                });
+            },
+            incrementItem(item) {
+                axios.post('/cart/goodsIncreament', {
+                    cart_id: item.cart_id
+                })
+                    .then(response => {
+                        const result = response.data;
+                        if (result === "success") {
+                            item.cart_goodnumber += 1;
+                        } else {
+                           alert('增加商品数量失败');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error incrementing item:', error);
+                        alert('增加商品数量失败');
+                    });
+            },
+            decrementItem(item) {
+                axios.post('/cart/goodsDecreament', {
+                    cart_id: item.cart_id
+                })
+                    .then(response => {
+                        const result = response.data
+                        if (result === "success") {
+                            item.cart_goodnumber -= 1;
+                            if (item.cart_goodnumber === 0) {
+                                this.cart = this.cart.filter(cartItem => cartItem.cart_id !== item.cart_id);
+                            }
+                        } else {
+                            alert('减少商品数量失败');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error decrementing item:', error);
+                        alert('减少商品数量失败');
+                    });
+            },
+            removeItem(item, index) {
+                axios.post('/cart/goodsRemove', {
+                    cart_id: item.cart_id
+                })
+                    .then(response => {
+                        if (response.data === "success") {
+                            this.cart.splice(index, 1);
+                        } else {
+                            alert('移除商品失败');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error removing item:', error);
+                        alert('移除商品失败');
+                    });
+            },
+            createOrder() {
+                const username = sessionStorage.getItem("username")
+                const selectedItems = this.selectedItems.map(item => item.cart_id);
 
+                const orderData = {
+                    userName: username, // 替换为实际的用户名
+                    cartsid: selectedItems,
+                    total_price: parseFloat(this.totalAmount.toFixed(2)) // 确保 total_price 为数字类型
+                };
+                console.log(selectedItems,username,this.totalAmount)
+                axios.post('/order/addOrder', orderData)
+                    .then(response => {
+                        if (response.data === "success") {
+                            alert('订单创建成功');
+                            this.closeModal();
+                            this.cart = this.cart.filter(item => !item.selected); // 清除已结算的商品
+                        } else {
+                            alert('订单创建失败');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error creating order:', error);
+                        alert('订单创建失败');
+                    });
+            },
+            openModal() {
+                this.modal = new bootstrap.Modal(document.getElementById('checkoutModal'));
+                this.modal.show();
+            },
+            closeModal() {
+                if (this.modal) {
+                    this.modal.hide();
+                }
+            },
+            performSearch() {
+                localStorage.setItem('searchQuery', this.searchQuery);
+                window.location.href = '/goods/goodslist';
+            }
+        },
+        mounted() {
+            this.fetchCart(); // 获取购物车信息
+        }
+    });
+</script>
 </body>
 
 </html>
