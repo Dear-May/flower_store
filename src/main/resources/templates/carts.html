@@ -331,7 +331,7 @@
                 axios.post('/order/addOrder', orderData)
                     .then(response => {
                         if (response.data === "success") {
-                            alert('订单创建成功');
+                            alert('订单购买成功，等待商家发货');
                             this.closeModal();
                             this.cart = this.cart.filter(item => !item.selected); // 清除已结算的商品
                         } else {
