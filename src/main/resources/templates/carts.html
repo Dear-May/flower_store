@@ -82,6 +82,7 @@
 </head>
 
 <body>
+<div id="app">
     <header>
         <div class="header-bg">
             <div class="container">
@@ -102,14 +103,14 @@
                         </ul>
                     </div>
                     <!-- 搜索框 -->
-                    <form class="d-flex mx-3">
-                        <div class="input-group-diy">
+                    <div class="d-flex mx-3">
+                        <div class="input-group">
                             <input type="text" class="form-control" placeholder="输入搜索内容" aria-label="搜索"
-                                   aria-describedby="basic-addon2">
+                                   aria-describedby="basic-addon2" v-model="searchQuery">
                         </div>
-                        <button class="btn btn-dark" type="button" id="basic-addon2"><i
+                        <button class="btn" type="button" id="basic-addon2" @click="performSearch"><i
                                 class="bi bi-search"></i></button>
-                    </form>
+                    </div>
                     <div class="navbar-icons d-flex align-items-center">
                         <div class="nav-item d-inline-flex">
                             <i class="bi bi-person-circle  mx-3 "></i>
@@ -124,7 +125,7 @@
         </div>
     </header>
     <img th:src="@{/imgs/text.png}">
-    <div class="container" id="app">
+    <div class="container">
         <h2 class="text-center  mb-4">购物车 (全部 {{ cart.length }} 件)</h2>
         <div class="table-container rounded-3 shadow-lg">
             <table id="car" class="table table-striped rounded">
@@ -223,6 +224,7 @@
         <p>版权所有 沪ICP备13016979 沪公网安备 31011402005615号 | 食品经营许可证编号：JY13101050027966</p>
     
     </footer>
+</div>
     <script>
         new Vue({
             el: '#app',
@@ -267,6 +269,11 @@
                     if (this.modal) {
                         this.modal.hide();
                     }
+                },
+                performSearch() {
+                    localStorage.setItem('searchQuery', this.searchQuery);
+                    // console.log(this.searchQuery)
+                    window.location.href = '/goods/goodslist';
                 }
             }
         });
