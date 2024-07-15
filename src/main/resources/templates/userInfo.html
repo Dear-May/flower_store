@@ -35,9 +35,7 @@
         .profile-avatar img {
             border-radius: 50%;
             width: 150px;
-            /* 可以根据需要调整大小 */
             height: 150px;
-            /* 可以根据需要调整大小 */
             object-fit: cover;
         }
 
@@ -47,11 +45,8 @@
             border-top: 1px solid #e7e7e7;
             width: 100%;
             justify-content: center;
-            /* 水平居中 */
             align-items: center;
-            /* 垂直居中 */
             text-align: center;
-            /* 文本内容居中，如果需要 */
         }
 
         .footer-links a {
@@ -64,11 +59,6 @@
             text-decoration: underline;
         }
 
-        .footer-info,
-        .footer-qrcode,
-        .footer-contact {
-            margin-top: 10px;
-        }
     </style>
 </head>
 
@@ -288,21 +278,19 @@
                 },
                 currentTab: 'allOrders',
                 orders: [],
-                showModal: false, // 确保showModal已经定义
-                modalTab: 'changePassword', // 确保modalTab已经定义
-                selectedFile: null, // 确保selectedFile已经定义
-                oldPassword: '',          // 添加oldPassword
-                newPassword: '',          // 添加newPassword
-                confirmPassword: '',      // 添加confirmPassword
-                isPasswordConfirmed: false  // 添加isPasswordConfirmed
+                showModal: false,
+                modalTab: 'changePassword',
+                selectedFile: null,
+                oldPassword: '',
+                newPassword: '',
+                confirmPassword: '',
+                isPasswordConfirmed: false
             },
             mounted() {
-                // 假设用户名保存在sessionStorage中
                 const username = sessionStorage.getItem('username');
                 if (username) {
                     axios.post('/user/showUserInfo', {
                         userName: username,
-                        // headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                     })
                         .then(response => {
                             this.profile = response.data.data;
@@ -372,7 +360,7 @@
                     if (this.selectedFile) {
                         const formData = new FormData();
                         formData.append('avatar', this.selectedFile);
-                        formData.append('username', sessionStorage.getItem('username')); // 假设需要发送用户名
+                        formData.append('username', sessionStorage.getItem('username'));
                         axios.post('/api/uploadAvatar', formData, {
                             headers: {
                                 'Content-Type': 'multipart/form-data'

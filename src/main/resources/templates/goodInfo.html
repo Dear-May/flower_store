@@ -132,9 +132,9 @@
             background-color: white;
             border-top: 1px solid #e7e7e7;
             width: 100%;
-            justify-content: center; /* 水平居中 */
-            align-items: center;    /* 垂直居中 */
-            text-align: center;     /* 文本内容居中，如果需要 */
+            justify-content: center;
+            align-items: center;
+            text-align: center;
         }
         .footer-links a {
             padding: 20px;
@@ -273,7 +273,7 @@
 
             $('#add-to-cart-btn').on('click', function() {
                 $.ajax({
-                    url: '/goods/AddGoodsIntoShoppingCart',  // 替换为你的实际添加购物车的接口
+                    url: '/goods/AddGoodsIntoShoppingCart',
                     method: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify({
@@ -303,7 +303,6 @@
             performSearch() {
                 localStorage.setItem('searchQuery', this.searchQuery);
                 // console.log(this.searchQuery);
-                // 跳转到shop.html
                 window.location.href = '/goods/goodslist';
             }
         }

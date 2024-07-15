@@ -107,7 +107,7 @@
                             </ul>
                         </div>
                         <!-- 搜索框 -->
-                        <form class="d-flex mx-3" @submit.prevent="performSearch">
+                        <form class="d-flex mx-3">
                             <div class="input-group-diy">
                                 <input type="text" class="form-control" placeholder="输入搜索内容" aria-label="搜索"
                                     aria-describedby="basic-addon2" v-model="searchQuery">
@@ -294,7 +294,7 @@
                     })
                         .then(response => {
                             this.products = response.data;
-                            this.sortFilteredProducts(); // 加载产品后进行排序
+                            this.sortFilteredProducts();
                         })
                         .catch(error => {
                             console.error('Error fetching search results:', error);
@@ -336,7 +336,7 @@
                 },
                 filterByCategory(event) {
                     this.selectedCategory = event.target.value;
-                    this.currentPage = 1; // 重置分页器当前页
+                    this.currentPage = 1;
                 },
                 filterCategory(category) {
                     return this.selectedCategory === 'all' || category === this.selectedCategory;
@@ -369,7 +369,7 @@
                     } else if (this.sortOrder === 'descend') {
                         this.products.sort((a, b) => b.good_price - a.good_price);
                     } else {
-                        // 默认排序方式，可以根据需要进行调整
+                        this.fetchProducts();
                     }
                 },
                 performSearch() {

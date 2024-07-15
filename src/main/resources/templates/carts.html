@@ -49,12 +49,12 @@
 
         .navbar-nav .nav-link:hover::before {
             background-color: rgb(0, 0, 0);
-            /* 线条的颜色 */
+
         }
 
         .input-group .form-control {
             border-bottom: 1px solid rgb(69, 60, 60);
-            /* 添加底部白色线条 */
+
             color: black;
         }
 
@@ -66,9 +66,9 @@
             background-color: white;
             border-top: 1px solid #e7e7e7;
             width: 100%;
-            justify-content: center; /* 水平居中 */
-            align-items: center;    /* 垂直居中 */
-            text-align: center;     /* 文本内容居中，如果需要 */
+            justify-content: center;
+            align-items: center;
+            text-align: center;
         }
         .footer-links a {
             padding: 20px;
@@ -229,7 +229,7 @@
             cart: [],
             allSelected: false,
             modal: null,
-            searchQuery: '' // 添加搜索查询的数据绑定
+            searchQuery: ''
         },
         computed: {
             totalAmount() {
@@ -251,7 +251,7 @@
                         console.log(response.data)
                         this.cart = response.data.map(item => ({
                             ...item,
-                            selected: false 
+                            selected: false
                         }));                    })
                     .catch(error => {
                         console.error('Error fetching cart:', error);
@@ -318,13 +318,16 @@
             createOrder() {
                 const username = sessionStorage.getItem("username")
                 const selectedItems = this.selectedItems.map(item => item.cart_id);
-
+                if (selectedItems.length === 0) {
+                    alert('订单为空，请选择商品');
+                    return;
+                }
                 const orderData = {
-                    userName: username, // 替换为实际的用户名
+                    userName: username,
                     cartsid: selectedItems,
                     total_price: parseFloat(this.totalAmount.toFixed(2)) // 确保 total_price 为数字类型
                 };
-                console.log(selectedItems,username,this.totalAmount)
+                //console.log(selectedItems,username,this.totalAmount)
                 axios.post('/order/addOrder', orderData)
                     .then(response => {
                         if (response.data === "success") {
@@ -355,7 +358,7 @@
             }
         },
         mounted() {
-            this.fetchCart(); // 获取购物车信息
+            this.fetchCart();
         }
     });
 </script>

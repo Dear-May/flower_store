@@ -20,13 +20,9 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            /* 确保背景不重复 */
             height: 100%;
-            /* 设置body的高度为视口的100% */
             min-height: 96vh;
-            /* 确保至少为视口的高度 */
             width: 100%;
-            /* 设置body的宽度为视口的100% */
         }
 
         .logo {
@@ -104,7 +100,6 @@
                 </div>
             </div>
         </div>
-        <!-- 提示框占位符 -->
         <div id="alertPlaceholder" class="container mt-3"></div>
     </div>
     <script>
@@ -131,22 +126,18 @@
             var registerContent = document.getElementById('register');
 
             loginTab.addEventListener('click', function () {
-                // 更新选项卡类
                 loginTab.classList.add('active', 'text-danger');
                 registerTab.classList.remove('active', 'text-danger');
 
-                // 更新内容显示
                 loginContent.classList.add('show', 'active');
                 registerContent.classList.remove('show', 'active');
             });
 
             registerTab.addEventListener('click', function () {
-                // 更新选项卡类
                 registerTab.classList.add('active');
                 registerTab.classList.add('text-danger');
                 loginTab.classList.remove('active', 'text-danger');
 
-                // 更新内容显示
                 registerContent.classList.add('show', 'active');
                 loginContent.classList.remove('show', 'active');
             });
@@ -159,7 +150,6 @@
             if (sessionUsername) {
                 window.location.href = '/user/successLogin'
             }
-            // 处理登录注册表单提交
             document.querySelector('#loginButton').addEventListener('click', function () {
                 const form = document.querySelector('#loginForm');
                 const username = form.querySelector('input[name="username"]').value;

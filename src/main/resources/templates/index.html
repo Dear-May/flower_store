@@ -25,35 +25,26 @@
 
         .input-group .form-control {
             border: none;
-            /* 移除所有边框 */
             border-bottom: 1px solid white;
-            /* 添加底部白色线条 */
             background: transparent;
-            /* 如果需要，可以设置背景为透明 */
             color: white;
         }
 
         .input-group .form-control::placeholder {
             color: white;
-            /* 设置placeholder文字颜色为白色 */
             opacity: 1;
-            /* 确保placeholder文字不透明 */
         }
 
         .input-group .form-control:focus {
             outline: none;
-            /* 移除聚焦时的轮廓 */
             box-shadow: none;
-            /* 移除聚焦时的阴影 */
             border-bottom-width: 2px;
-            /* 线条变粗 */
             transition: width 0.5s ease;
         }
 
 
         .input-group .btn {
             border: none;
-            /* 移除所有边框 */
             background-color: transparent;
 
         }
@@ -124,33 +115,28 @@
                 <p>和每个平淡且重复的日子说ByeBye</p>
             </div>
             <!-- 轮播图 -->
-            <div id="carouselExampleIndicators" class="carousel slide">
+            <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" data-bs-interval="2500">
                 <div class="carousel-indicators">
-                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0"
-                        class="active" aria-current="true" aria-label="Slide 1"></button>
-                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
-                        aria-label="Slide 2"></button>
-                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
-                        aria-label="Slide 3"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
                 </div>
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                        <img th:src="@{/imgs/index-1.jpg}" class="d-block w-100 img-fluid rounded" alt="...">
+                        <img src="/imgs/index-1.jpg" class="d-block w-100 img-fluid rounded" alt="...">
                     </div>
                     <div class="carousel-item">
-                        <img th:src="@{/imgs/index-2.jpg}" class="d-block w-100 img-fluid rounded" alt="...">
+                        <img src="/imgs/index-2.jpg" class="d-block w-100 img-fluid rounded" alt="...">
                     </div>
                     <div class="carousel-item">
-                        <img th:src="@{/imgs/index-3.jpg}" class="d-block w-100 img-fluid rounded" alt="...">
+                        <img src="/imgs/index-3.jpg" class="d-block w-100 img-fluid rounded" alt="...">
                     </div>
                 </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
-                    data-bs-slide="prev">
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Previous</span>
                 </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
-                    data-bs-slide="next">
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Next</span>
                 </button>
@@ -271,7 +257,7 @@
             },
             methods: {
                 fetchProducts() {
-                    axios.post('/goods/getgoods') // 替换为实际的API端点
+                    axios.post('/goods/getgoods')
                         .then(response => {
                             this.products = response.data;
                             this.filterProducts();
@@ -316,7 +302,6 @@
                 performSearch() {
                     localStorage.setItem('searchQuery', this.searchQuery);
                     // console.log(this.searchQuery);
-                    // 跳转到shop.html
                     window.location.href = '/goods/goodslist';
                 }
             },
