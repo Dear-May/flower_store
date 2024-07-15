@@ -174,10 +174,10 @@
                     <div class="d-flex mx-3">
                         <div class="input-group">
                             <input type="text" class="form-control" placeholder="输入搜索内容" aria-label="搜索"
-                                   aria-describedby="basic-addon2"  v-model="searchQuery">
-                            <button class="btn btn-dark" type="button" id="basic-addon2" @click="performSearch"><i
-                                    class="bi bi-search"></i></button>
+                                   aria-describedby="basic-addon2" v-model="searchQuery">
                         </div>
+                        <button class="btn-diy" type="button" id="basic-addon2" @click="performSearch"><i
+                                class="bi bi-search"></i></button>
                     </div>
 
                     <div class="navbar-icons d-flex align-items-center">
@@ -198,8 +198,8 @@
     <div class="container mt-4">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="index.html">首页</a></li>
-                <li class="breadcrumb-item"><a href="shop.html">全部商品</a></li>
+                <li class="breadcrumb-item"><a href="/index">首页</a></li>
+                <li class="breadcrumb-item"><a href="/goods/goodslist">全部商品</a></li>
                 <li class="breadcrumb-item active" aria-current="page" id="breadcrumb-item-name"></li>
             </ol>
         </nav>
@@ -271,6 +271,20 @@
             });
         } else {
             console.error('Element with ID "goodsData" not found');
+        }
+    });
+    new Vue({
+        el: '#app',
+        data: {
+            searchQuery: ""
+        },
+        methods: {
+            performSearch() {
+                localStorage.setItem('searchQuery', this.searchQuery);
+                // console.log(this.searchQuery);
+                // 跳转到shop.html
+                window.location.href = '/goods/goodslist';
+            }
         }
     });
 </script>

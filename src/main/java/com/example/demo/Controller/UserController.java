@@ -20,11 +20,6 @@ public class UserController {
     @Autowired
     UserMapper userMapper;
 
-    @RequestMapping("/register")
-    public String register() {
-        return "register";
-    }
-
     @RequestMapping("/login")
     public String login() {
         return "login";
