@@ -65,6 +65,8 @@
 </head>
 
 <body>
+
+    <div id="app">
     <div id="app">
         <header>
             <div class="header-bg">
@@ -182,11 +184,11 @@
                             <div class="row">
                                 <div v-for="product in bestsellerProducts" :key="product.id" class="col-md-3">
                                     <div class="card">
-                                        <a :href="'/goodinfo?GoodsId=' + product.id">
+                                        <a :href="'goods/goodinfo?GoodsId=' + product.id">
                                             <img :src="product.goods_imgurl" class="card-img-top" alt="...">
                                         </a>
                                         <div class="card-body">
-                                            <a :href="'/goodinfo?GoodsId=' + product.id">
+                                            <a :href="'goods/goodinfo?GoodsId=' + product.id">
                                                 <h5 class="card-title">{{ product.goods_name }}</h5>
                                             </a>
                                             <p class="card-text">{{ product.goods_describe }}</p>

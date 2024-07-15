@@ -72,6 +72,8 @@
 </head>
 
 <body>
+
+
 <div id="app">
     <header class="bg-primary">
         <div class="container">
@@ -120,25 +122,26 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="index.html">首页</a></li>
                 <li class="breadcrumb-item"><a href="shop.html">全部商品</a></li>
-                <li class="breadcrumb-item active" aria-current="page">深情挚爱/卡罗拉玫瑰52枝</li>
+                <li class="breadcrumb-item active" aria-current="page"> [[${Goods.goods_name}]]</li>
             </ol>
         </nav>
         <div class="row product-detail">
             <div class="col-md-6 product-images">
-                <img id="mainImage" th:src="@{/imgs/item-1.jpg}">
+
+                <img id="mainImage" th:src="@{${Goods.goods_imgurl}}">
                 <div class="product-thumbnails">
-                    <img :src="@{/imgs/item-1.jpg}" alt="Thumbnail 1"
+                    <img :src="@{${Goods.goods_imgurl}}" alt="Thumbnail 1"
                         onclick="changeImage('imgs/item-1.jpg')">
                 </div>
                 <p class="text-muted mt-2">温馨提示：以上图片仅供参考，若图片与实物有所不同，则以实物为准。</p>
             </div>
             <div class="col-md-6">
-                <h1 class="product-title">深情挚爱/卡罗拉玫瑰52枝</h1>
-                <p class="product-price">¥509</p>
+                <h1 class="product-title">[[${Goods.goods_name}]]</h1>
+                <p class="product-price">[[${Goods.good_price}]]</p>
                 <hr>
                 <div class="product-info">
-                    <p><strong>详情：</strong>52朵玫瑰谐音吾爱，代表爱意深厚</p>
-                    <p><strong>分类：</strong>卡罗拉玫瑰52枝</p>
+                    <p><strong>详情：</strong>[[${Goods.goods_describe}]]</p>
+                    <p><strong>分类：</strong>[[${Goods.goods_category}]]</p>
                     <p><strong>颜色：</strong>红色风铃纸3张，白色小号英文画纸（You are my love）4张，白色雪梨纸13张，酒红色罗纹绸金丝带2米</p>
                 </div>
                 <hr>
