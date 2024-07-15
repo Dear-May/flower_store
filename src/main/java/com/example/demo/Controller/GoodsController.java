@@ -32,10 +32,10 @@ public class GoodsController {
 
 
     @RequestMapping("/goodinfo")
-    public String GoodInfo(@RequestParam(value = "GoodsId", required = false) int GoodsID, Model model) {
+    public String goodsDetail(@RequestParam(value = "GoodsId", required = false) int GoodsID, Model model) {
         System.out.println(GoodsID);
-        model.addAttribute("GoodsId", GoodsID);
-        return "good";
+        model.addAttribute("Goods", goodsMapper.selectGoodInoById(GoodsID));
+        return "goodinfo";
     }//返回GoodInfo页面 并传递一个当前商品的id，页面在加载的时候通过这个id到数据库搜索全部的商品信息
 
     @ResponseBody
