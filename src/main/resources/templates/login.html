@@ -72,7 +72,8 @@
                                 <input type="text" class="form-control" placeholder="请输入用户名" name="username" required>
                             </div>
                             <div class="mb-3">
-                                <input type="password" class="form-control" placeholder="请输入密码" name="password" required>
+                                <input type="password" class="form-control" placeholder="请输入密码" name="password"
+                                    required>
                             </div>
                             <div class="mb-3">
                                 <input type="checkbox" class="form-check-input" id="rememberMe">
@@ -81,26 +82,29 @@
                             <button type="button" class="btn btn-outline-danger w-100" id="loginButton">登 录</button>
                         </form>
                     </div>
-                    <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
-                        <h2>注册</h2>
-                        <form id="registerForm">
-                            <div class="mb-3">
-                                <input type="text" class="form-control" placeholder="设置用户名" name="username" required>
-                            </div>
-                            <div class="mb-3">
-                                <input type="password" class="form-control" placeholder="设置密码" name="password" required>
-                            </div>
-                            <div class="mb-3">
-                                <input type="password" class="form-control" placeholder="确认密码" name="confirmPassword" required>
-                            </div>
+                    <p class="mt-3 text-center"><a href="http://localhost:80" target="_blank" class="link link-primary">管理员入口</a></p>
+                </div>
+                <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
+                    <h2>注册</h2>
+                    <form id="registerForm">
+                        <div class="mb-3">
+                            <input type="text" class="form-control" placeholder="设置用户名" name="username" required>
+                        </div>
+                        <div class="mb-3">
+                            <input type="password" class="form-control" placeholder="设置密码" name="password" required>
+                        </div>
+                        <div class="mb-3">
+                            <input type="password" class="form-control" placeholder="确认密码" name="confirmPassword"
+                                required>
+                        </div>
 
-                            <button type="button" class="btn btn-outline-danger w-100" id="registerButton">注册</button>
-                        </form>
-                    </div>
+                        <button type="button" class="btn btn-outline-danger w-100" id="registerButton">注册</button>
+                    </form>
                 </div>
             </div>
         </div>
-        <div id="alertPlaceholder" class="container mt-3"></div>
+    </div>
+    <div id="alertPlaceholder" class="container mt-3"></div>
     </div>
     <script>
         function setCookie(name, value) {
@@ -222,7 +226,7 @@
                             showAlert('请求失败，请重试', 'danger');
                         });
                 } else {
-                    showAlert("账号或密码不能为空","danger")
+                    showAlert("账号或密码不能为空", "danger")
                 }
             });
             // 显示提示框
@@ -234,7 +238,10 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                 </div>`;
                 alertPlaceholder.append(wrapper);
-            }
+            },
+            // document.getElementById('jumpButton').addEventListener('click', function() {
+            //     window.location.href = 'http://localhost:80';
+            // });
 
         });
 
